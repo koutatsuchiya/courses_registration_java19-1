@@ -17,12 +17,6 @@ public class Main
         String s = "2021-3-10";
         String e = "2021-7-15";
 
-        Semester temp = new Semester();
-        temp.setName(2);
-        temp.setYear(2021);
-        temp.setDayStart(Date.valueOf(s));
-        temp.setDayEnd(Date.valueOf(e));
-        temp.setCurrent(true);
         SemesterDAO.addSemester(temp);
 	    List<Semester> t = SemesterDAO.getAllSemester();
         for (Semester i : t)
