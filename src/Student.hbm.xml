@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="pojo.Student" table="student" schema="public" catalog="registration">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+            <generator class="increment"/>
+        </id>
+        <property name="mssv">
+            <column name="mssv" sql-type="varchar"/>
+        </property>
+        <property name="name">
+            <column name="name" sql-type="varchar"/>
+        </property>
+        <property name="gender">
+            <column name="gender" sql-type="varchar"/>
+        </property>
+        <many-to-one class="pojo.LopHoc" name="classId" column="class_id"
+                     fetch="join" lazy="false">
+
+        </many-to-one>
+    </class>
+</hibernate-mapping>
