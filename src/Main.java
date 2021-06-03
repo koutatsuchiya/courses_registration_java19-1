@@ -28,11 +28,6 @@ public class Main
         for (Semester i : t)
             System.out.println(i.toString());
 
-        /*LopHocDAO.deleteLopHoc(2);
-        List<LopHoc> t = LopHocDAO.getAllLopHoc();
-        for (LopHoc i : t)
-            System.out.println(i.toString());
-
         /*login myApp = new login();
         myApp.setVisible(true);*/
     }
