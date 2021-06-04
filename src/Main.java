@@ -14,12 +14,18 @@ public class Main
 {
     public static void main(String[] args)
     {
-        String s = "2021-3-10";
-        String e = "2021-7-15";
+        Course temp = new Course();
+        temp.setSubjectId("MH001");
+        temp.setGvlt("Pham Nguyen Cuong");
+        temp.setRoom("G202");
+        temp.setWeekday(7);
+        temp.setShift(1);
+        temp.setSlot(100);
+        temp.setSemesterId(1);
+        CourseDAO.addCourse(temp);
 
-        SemesterDAO.addSemester(temp);
-	    List<Semester> t = SemesterDAO.getAllSemester();
-        for (Semester i : t)
+	    List<Course> t = CourseDAO.getAllCourse();
+        for (Course i : t)
             System.out.println(i.toString());
 
         /*login myApp = new login();

@@ -16,6 +16,8 @@
         <mapping resource="Semester.hbm.xml"/>
         <mapping resource="Student.hbm.xml"/>
         <mapping resource="LopHoc.hbm.xml"/>
+        <mapping resource="RegisterSession.hbm.xml"/>
+        <mapping resource="Course.hbm.xml"/>
 
         <!-- DB schema will be updated if needed -->
         <!-- <property name="pojo.hbm2ddl.auto">update</property> -->

@@ -1,7 +1,7 @@
 package pojo;
 
 import java.sql.Date;
-import java.util.Objects;
+import java.util.*;
 
 public class Semester {
     private int id;
@@ -10,6 +10,7 @@ public class Semester {
     private Date dayStart;
     private Date dayEnd;
     private boolean current;
+
 
     public int getId() {
         return id;
@@ -74,7 +75,7 @@ public class Semester {
 
     @Override
     public String toString() {
-        return "{" +
+        return "Semester{" +
                 "id=" + id +
                 ", name=" + name +
                 ", year=" + year +

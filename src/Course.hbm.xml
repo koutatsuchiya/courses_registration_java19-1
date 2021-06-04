@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="pojo.Course" table="course" schema="public" catalog="registration">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+            <generator class="increment"/>
+        </id>
+        <property name="subjectId">
+            <column name="subject_id" sql-type="varchar"/>
+        </property>
+        <property name="gvlt">
+            <column name="gvlt" sql-type="varchar"/>
+        </property>
+        <property name="room">
+            <column name="room" sql-type="varchar"/>
+        </property>
+        <property name="weekday">
+            <column name="weekday" sql-type="integer"/>
+        </property>
+        <property name="shift">
+            <column name="shift" sql-type="integer"/>
+        </property>
+        <property name="slot">
+            <column name="slot" sql-type="integer"/>
+        </property>
+        <property name="semesterId">
+            <column name="semester_id" sql-type="integer"/>
+        </property>
+    </class>
+</hibernate-mapping>
