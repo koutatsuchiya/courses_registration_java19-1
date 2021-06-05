@@ -1,38 +1,34 @@
 package frame;
 
-import dao.GiaoVuDAO;
+import dao.*;
+import pojo.*;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 
 public class test extends JFrame
 {
     private JPanel contentPane;
-    private JButton Find;
-    private JLabel ID;
-    private JTextField tID;
-    private JTextField tGV;
-    private JLabel infor;
+    private JTable table1;
+    private JButton button1;
+    private JButton button2;
+    private JScrollPane scrollpane;
 
-    public test(String title)
+    public test()
     {
-        super(title);
+        super("Testing table");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(contentPane);
         this.pack();
 
-        Find.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int gv_id = Integer.valueOf(tID.getText());
-                tGV.setText(GiaoVuDAO.getGiaoVu(gv_id).toString());
-            }
-        });
+        List<GiaoVu> temp = GiaoVuDAO.getAllGiaoVu();
+        DefaultTableModel t = new DefaultTableModel(null, new String[]{"id", "name"});
+        table1.setModel(t);
+        for (GiaoVu i : temp) {
+            t.addRow(new Object[]{i.getId(), i.getName()});
+        }
     }
-
-    /*private void createUIComponents()
-    {
-        //TODO: place custom component creation code here
-    }*/
 }
