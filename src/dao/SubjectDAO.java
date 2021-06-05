@@ -7,6 +7,7 @@ import org.hibernate.query.Query;
 import pojo.Subject;
 import utils.HibernateUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SubjectDAO 
@@ -110,5 +111,16 @@ public class SubjectDAO
             session.close();
         }
         return true;
+    }
+
+    public static List<Subject> getSubjectsFromString(String val)
+    {
+        List<Subject> sjs = SubjectDAO.getAllSubject();
+        List<Subject> temp = new ArrayList<>();
+        String t = val.toLowerCase();
+        for(Subject i : sjs)
+            if(i.getId().toLowerCase().contains(t) || i.getName().toLowerCase().contains(t) || String.valueOf(i.getCredits()).contains(t))
+                temp.add(i);
+        return temp;
     }
 }

@@ -14,11 +14,9 @@ public class Main
 {
     public static void main(String[] args)
     {
-        /*
-
-	    List<Course> t = CourseDAO.getAllCourse();
-        for (Course i : t)
-            System.out.println(i.toString());*/
+        /*GiaoVu temp = new GiaoVu();
+        temp.setName("PNST");
+        GiaoVuDAO.addGiaoVu(temp);*/
 
         gvFunction myApp = new gvFunction();
         myApp.setVisible(true);

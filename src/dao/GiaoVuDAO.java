@@ -8,6 +8,7 @@ import org.hibernate.query.Query;
 import utils.HibernateUtil;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GiaoVuDAO
@@ -144,5 +145,16 @@ public class GiaoVuDAO
             if(gv_name.equalsIgnoreCase(i.getName()))
                 return i;
         return null;
+    }
+
+    public static List<GiaoVu> getGiaoVusFromString(String val)
+    {
+        List<GiaoVu> gvs = getAllGiaoVu();
+        List<GiaoVu> temp = new ArrayList<>();
+        String t = val.toLowerCase();
+        for (GiaoVu i : gvs)
+            if(String.valueOf(i.getId()).toLowerCase().contains(t) || i.getName().toLowerCase().contains(t))
+                temp.add(i);
+        return temp;
     }
 }
