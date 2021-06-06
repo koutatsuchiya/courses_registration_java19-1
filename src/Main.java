@@ -21,7 +21,7 @@ public class Main
         /*test app = new test();
         app.setVisible(true);*/
 
-        /*gvFunction myApp = new gvFunction();
-        myApp.setVisible(true);*/
+        gvFunction myApp = new gvFunction();
+        myApp.setVisible(true);
     }
 }

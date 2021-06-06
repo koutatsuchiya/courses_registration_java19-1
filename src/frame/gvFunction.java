@@ -49,7 +49,6 @@ public class gvFunction extends JFrame
     private JButton addBut3;
     private JButton deleteBut3;
     private JPanel semesterPane;
-    private JTextField sm_nameText;
     private JTextField sm_yearText;
     private JLabel sm_nameLabel;
     private JLabel sm_yearLabel;
@@ -64,6 +63,7 @@ public class gvFunction extends JFrame
     private JComboBox sm_month_comboBox2;
     private JComboBox sm_year_comboBox2;
     private JComboBox sm_cur_comboBox;
+    private JComboBox sm_name_comboBox;
 
     public gvFunction()
     {
@@ -292,10 +292,8 @@ public class gvFunction extends JFrame
                 date2.append(sm_month_comboBox2.getSelectedItem()); date2.append("-");
                 date2.append(sm_day_comboBox2.getSelectedItem());
 
-                String[] t = {sm_nameText.getText(), sm_yearText.getText(), date1.toString(), date2.toString(), String.valueOf(sm_cur_comboBox.getSelectedItem())};
-                if (t[0].equals("") || t[1].equals("")) {
-                    return;
-                }
+                String[] t = {String.valueOf(sm_name_comboBox.getSelectedItem()), sm_yearText.getText(), date1.toString(), date2.toString(), String.valueOf(sm_cur_comboBox.getSelectedItem())};
+                if (t[1].equals("")) { return; }
                 Semester temp1 = new Semester();
                 try {
                     temp1.setName(Integer.valueOf(t[0]));
@@ -309,8 +307,8 @@ public class gvFunction extends JFrame
                 }
                 if (SemesterDAO.addSemester(temp1)) {
                     Semester temp2 = SemesterDAO.getSemesterFromDate(temp1.getDayStart(), temp1.getDayEnd());
+
                     semesterTable.addRow(new Object[]{temp2.getId(), temp2.getName(), temp2.getDayStart(), temp2.getDayEnd(), temp2.isCurrent()});
-                    sm_nameText.setText("");
                     sm_yearText.setText("");
                 } else
                     JOptionPane.showMessageDialog(null, "Error! Cannot add this Semester!");
@@ -324,7 +322,7 @@ public class gvFunction extends JFrame
                 deleteBut3.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        SemesterDAO.deleteSemester((int)smTable.getValueAt(smTable.getSelectedRow(), 0));
+                        SemesterDAO.deleteSemester((int) smTable.getValueAt(smTable.getSelectedRow(), 0));
                         semesterTable.removeRow(smTable.getSelectedRow());
                     }
                 });
@@ -342,6 +340,6 @@ public class gvFunction extends JFrame
                 });
             }
         });
-
+        //CAU 5
     }
 }

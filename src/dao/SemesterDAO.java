@@ -145,6 +145,8 @@ public class SemesterDAO
         try {
             final String hql = "select sm from Semester sm where sm.dayStart = :d1 and sm.dayEnd = :d2";
             Query query = session.createQuery(hql);
+            query.setParameter("d1", d1);
+            query.setParameter("d2", d2);
             temp = (Semester) query.uniqueResult();
         } catch (HibernateException e)
         {
