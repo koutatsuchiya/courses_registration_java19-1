@@ -5,8 +5,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import pojo.RegisterSession;
+import pojo.Semester;
 import utils.HibernateUtil;
 
+import java.sql.Date;
 import java.util.List;
 
 public class RegisterSessionDAO
@@ -110,5 +112,25 @@ public class RegisterSessionDAO
             session.close();
         }
         return true;
+    }
+
+    public static RegisterSession getRegisterSessionFromDate(Date d1, Date d2)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        RegisterSession temp = null;
+        try {
+            final String hql = "select ss from RegisterSession ss where ss.dayStart = :d1 and ss.dayEnd = :d2";
+            Query query = session.createQuery(hql);
+            query.setParameter("d1", d1);
+            query.setParameter("d2", d2);
+            temp = (RegisterSession) query.uniqueResult();
+        } catch (HibernateException e)
+        {
+            System.err.println(e);
+        } finally
+        {
+            session.close();
+        }
+        return temp;
     }
 }

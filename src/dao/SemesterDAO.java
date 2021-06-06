@@ -56,17 +56,13 @@ public class SemesterDAO
         try {
             final String hql = "select count(*) from Semester sm where sm.current = true";
             Query query = session.createQuery(hql);
-            String t = query.uniqueResult().toString();
-            n = Integer.valueOf(t);
+            n = Integer.valueOf(query.uniqueResult().toString());
         } catch (Exception e) {
             System.err.println(e);
         } finally {
             session.close();
         }
-        if(n != 0)
-            return true;
-        else
-            return false;
+        return n > 0;
     }
 
     public static boolean addSemester(Semester sm)
@@ -153,6 +149,22 @@ public class SemesterDAO
             System.err.println(e);
         } finally
         {
+            session.close();
+        }
+        return temp;
+    }
+
+    public static Semester getCurrent()
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Semester temp = null;
+        try {
+            final String hql = "select sm from Semester sm where sm.current = true";
+            Query query = session.createQuery(hql);
+            temp = (Semester) query.uniqueResult();
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
             session.close();
         }
         return temp;

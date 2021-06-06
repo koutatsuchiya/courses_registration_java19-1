@@ -113,4 +113,55 @@ public class LopHocDAO
         }
         return true;
     }
+
+    public static int countMale(int lh_id)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        int n = 0;
+        try {
+            final String hql = "select count(*) from LopHoc lh, Student st where lh.id = :lh_id and lh.id = st.classId.id and st.gender = 'Nam'";
+            Query query = session.createQuery(hql);
+            query.setParameter("lh_id", lh_id);
+            n = Integer.valueOf(query.uniqueResult().toString());
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
+            session.close();
+        }
+        return n;
+    }
+
+    public static int countFemale(int lh_id)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        int n = 0;
+        try {
+            final String hql = "select count(*) from LopHoc lh, Student st where lh.id = :lh_id and lh.id = st.classId.id and st.gender = 'Nu'";
+            Query query = session.createQuery(hql);
+            query.setParameter("lh_id", lh_id);
+            n = Integer.valueOf(query.uniqueResult().toString());
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
+            session.close();
+        }
+        return n;
+    }
+
+    public static LopHoc getLopHocFromName(String lh_name)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        LopHoc temp = null;
+        try {
+            final String hql = "select lh from LopHoc lh where lh.name = :lh_name";
+            Query query = session.createQuery(hql);
+            query.setParameter("lh_name", lh_name);
+            temp = (LopHoc) query.uniqueResult();
+        } catch (HibernateException e) {
+            System.err.println(e);
+        } finally {
+            session.close();
+        }
+        return temp;
+    }
 }

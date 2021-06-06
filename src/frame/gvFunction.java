@@ -64,6 +64,54 @@ public class gvFunction extends JFrame
     private JComboBox sm_year_comboBox2;
     private JComboBox sm_cur_comboBox;
     private JComboBox sm_name_comboBox;
+    private JPanel semesterForm;
+    private JPanel classPane;
+    private JTable lhTable;
+    private JButton deleteBut4;
+    private JButton addBut4;
+    private JTextField class_nameText;
+    private JPanel classForm;
+    private JLabel class_nameLabel;
+    private JScrollPane classScroll;
+    private JButton resetBut4;
+    private JPanel sessionPane;
+    private JTable ssTable;
+    private JButton addBut6;
+    private JPanel sessionForm;
+    private JComboBox ss_day_comboBox1;
+    private JComboBox ss_month_comboBox1;
+    private JComboBox ss_year_comboBox1;
+    private JComboBox ss_day_comboBox2;
+    private JComboBox ss_month_comboBox2;
+    private JComboBox ss_year_comboBox2;
+    private JLabel ss_dayStartLabel;
+    private JLabel ss_dayEndLabel;
+    private JPanel ssSpacing;
+    private JScrollPane ssScroll;
+    private JButton falseBut3;
+    private JTable crsTable;
+    private JButton resetBut7;
+    private JButton deleteBut7;
+    private JButton addBut7;
+    private JTextField crs_sj_idText;
+    private JTextField crs_gvltText;
+    private JTextField crs_roomText;
+    private JTextField crs_slotText;
+    private JTextField textField6;
+    private JComboBox crs_weekday_comboBox;
+    private JComboBox crs_shift_comboBox;
+    private JTextField findText7;
+    private JButton findBut7;
+    private JLabel crs_sj_idLabel;
+    private JLabel crs_gvltLabel;
+    private JLabel crs_roomLabel;
+    private JLabel crs_weekdayLabel;
+    private JLabel crs_shiftLabel;
+    private JLabel crs_slotLabel;
+    private JLabel crs_sm_idLabel;
+    private JPanel coursePane;
+    private JScrollPane crsScroll;
+    private JPanel crsForm;
 
     public gvFunction()
     {
@@ -329,17 +377,194 @@ public class gvFunction extends JFrame
                 setCurBut3.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Semester temp = SemesterDAO.getSemesterFromDate(Date.valueOf(smTable.getValueAt(smTable.getSelectedRow(), 2).toString()), Date.valueOf(smTable.getValueAt(smTable.getSelectedRow(), 3).toString()));
+                        Semester temp = SemesterDAO.getSemesterFromDate(Date.valueOf(smTable.getValueAt(smTable.getSelectedRow(), 3).toString()), Date.valueOf(smTable.getValueAt(smTable.getSelectedRow(), 4).toString()));
                         if(temp != null)
                         {
                             temp.setCurrent(true);
-                            if(!SemesterDAO.updateSemester(temp))
-                                JOptionPane.showMessageDialog(null, "Error! Cannot set this semester as current!");
+                            if(SemesterDAO.updateSemester(temp))
+                                smTable.setValueAt(true, smTable.getSelectedRow(), 5);
+                        }
+                    }
+                });
+                falseBut3.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        Semester temp = SemesterDAO.getSemesterFromDate(Date.valueOf(smTable.getValueAt(smTable.getSelectedRow(), 3).toString()), Date.valueOf(smTable.getValueAt(smTable.getSelectedRow(), 4).toString()));
+                        if(temp != null)
+                        {
+                            temp.setCurrent(false);
+                            if(SemesterDAO.updateSemester(temp))
+                                smTable.setValueAt(false, smTable.getSelectedRow(), 5);
+                            else
+                                JOptionPane.showMessageDialog(null, "Error! Cannot set this semester as non-current!");
                         }
                     }
                 });
             }
         });
-        //CAU 5
+
+        //CAU 5: LOP HOC---------------------------------------------------------------------------------------
+        List<LopHoc> lhs = LopHocDAO.getAllLopHoc();
+        DefaultTableModel lopHocTable = new DefaultTableModel(null, new String[]{"id", "name", "male", "female", "total"}){
+            public boolean isCellEditable(int row, int column){ return false; }
+        };
+        lhTable.setModel(lopHocTable);
+        for (LopHoc i : lhs) {
+            int n = LopHocDAO.countMale(i.getId());
+            int m = LopHocDAO.countFemale(i.getId());
+            int total = n + m;
+            lopHocTable.addRow(new Object[]{i.getId(), i.getName(), n, m, total});
+        }
+
+        addBut4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String t = class_nameText.getText();
+                if(t.equals("")) { return; }
+                LopHoc temp1 = new LopHoc();
+                temp1.setName(t);
+                if(LopHocDAO.addLopHoc(temp1))
+                {
+                    LopHoc temp2 = LopHocDAO.getLopHocFromName(t);
+                    int n = LopHocDAO.countMale(temp2.getId());
+                    int m = LopHocDAO.countFemale(temp2.getId());
+                    int total = n + m;
+                    lopHocTable.addRow(new Object[]{temp2.getId(), temp2.getName(), n, m, total});
+                    class_nameText.setText("");
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "Error! Cannot add class!");
+            }
+        });
+        ListSelectionModel listSelectionModel4 = lhTable.getSelectionModel();
+        listSelectionModel4.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listSelectionModel4.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                deleteBut4.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        LopHocDAO.deleteLopHoc((Integer) lhTable.getValueAt(lhTable.getSelectedRow(), 0));
+                        lopHocTable.removeRow(lhTable.getSelectedRow());
+                    }
+                });
+            }
+        });
+        resetBut4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int n_row = lopHocTable.getRowCount();
+                for(int i = n_row - 1; i >= 0; i--)
+                    lopHocTable.removeRow(i);
+                List<LopHoc> rs = LopHocDAO.getAllLopHoc();
+                for(LopHoc i : rs) {
+                    int n = LopHocDAO.countMale(i.getId());
+                    int m = LopHocDAO.countFemale(i.getId());
+                    int total = n + m;
+                    lopHocTable.addRow(new Object[]{i.getId(), i.getName(), n, m, total});
+                }
+                class_nameText.setText("");
+            }
+        });
+
+        //CAU 6: SINH VIEN---------------------------------------------------------------------------------
+
+
+        //CAU 7: KI DANG KI HOC PHAN-----------------------------------------------------------------------
+        List<RegisterSession> sss = RegisterSessionDAO.getAllRegisterSession();
+        DefaultTableModel registerSessionTable = new DefaultTableModel(null, new String[]{"id", "start date", "end date", "semester name", "semester year"}){
+            public boolean isCellEditable(int row, int column){ return false; }
+        };
+        ssTable.setModel(registerSessionTable);
+        for (RegisterSession i : sss) {
+            registerSessionTable.addRow(new Object[]{i.getId(), i.getDayStart(), i.getDayEnd(), i.getSemesterId().getName(), i.getSemesterId().getYear()});
+        }
+
+        addBut6.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //getting the date
+                StringBuilder date1 = new StringBuilder(), date2 = new StringBuilder();
+                date1.append(ss_year_comboBox1.getSelectedItem()); date1.append("-");
+                date1.append(ss_month_comboBox1.getSelectedItem()); date1.append("-");
+                date1.append(ss_day_comboBox1.getSelectedItem());
+                date2.append(ss_year_comboBox2.getSelectedItem()); date2.append("-");
+                date2.append(ss_month_comboBox2.getSelectedItem()); date2.append("-");
+                date2.append(ss_day_comboBox2.getSelectedItem());
+                try {
+                    String[] t = {date1.toString(), date2.toString()};
+                    RegisterSession temp1 = new RegisterSession();
+                    temp1.setDayStart(Date.valueOf(t[0]));
+                    temp1.setDayEnd(Date.valueOf(t[1]));
+                    temp1.setSemesterId(SemesterDAO.getCurrent());
+                    //adding this session
+                    if (RegisterSessionDAO.addRegisterSession(temp1)) {
+                        RegisterSession temp2 = RegisterSessionDAO.getRegisterSessionFromDate(temp1.getDayStart(), temp1.getDayEnd());
+                        registerSessionTable.addRow(new Object[]{temp2.getId(), temp2.getDayStart(), temp2.getDayEnd(), temp2.getSemesterId().getName(), temp2.getSemesterId().getYear()});
+                    } else
+                        JOptionPane.showMessageDialog(null, "Error! Cannot add this register session!");
+                } catch (Exception any_e) {
+                    JOptionPane.showMessageDialog(null, "Error! There is no current semester!");
+                }
+            }
+        });
+
+        //CAU 8: COURSE------------------------------------------------------------------------------------------
+        List<Course> crs = CourseDAO.getAllCourse();
+        DefaultTableModel courseTable = new DefaultTableModel(null, new String[]{"id", "subject id", "subject name", "subject credits", "gvlt", "room", "weekday", "shift", "slot"}){
+            public boolean isCellEditable(int row, int column){ return false; }
+        };
+        crsTable.setModel(courseTable);
+        for (Course i : crs) {
+            Subject t = SubjectDAO.getSubject(i.getSubjectId());
+            courseTable.addRow(new Object[]{i.getId(), t.getId(), t.getName(), t.getCredits(), i.getGvlt(), i.getRoom(), i.getWeekday(), i.getShift(), i.getSlot()});
+        }
+
+        addBut7.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String[] t = {};
+                if(t.equals("")) { return; }
+                Course temp1 = new Course();
+                temp1.
+                if(CourseDAO.addCourse(temp1))
+                {
+                    Course temp2 = CourseDAO
+                    courseTable.addRow(new Object[]{temp2.getId(),
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "Error! Cannot add class!");
+            }
+        });
+        ListSelectionModel listSelectionModel4 = crsTable.getSelectionModel();
+        listSelectionModel4.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listSelectionModel4.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                deleteBut7.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        CourseDAO.deleteCourse((Integer) crsTable.getValueAt(crsTable.getSelectedRow(), 0));
+                        CourseTable.removeRow(crsTable.getSelectedRow());
+                    }
+                });
+            }
+        });
+        resetBut7.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int n_row = CourseTable.getRowCount();
+                for(int i = n_row - 1; i >= 0; i--)
+                    CourseTable.removeRow(i);
+                List<Course> rs = CourseDAO.getAllCourse();
+                for(Course i : rs) {
+                    int n = CourseDAO.countMale(i.getId());
+                    int m = CourseDAO.countFemale(i.getId());
+                    int total = n + m;
+                    CourseTable.addRow(new Object[]{i.getId(), i.getName(), n, m, total});
+                }
+                class_nameText.setText("");
+            }
+        });
     }
 }

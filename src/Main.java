@@ -17,7 +17,6 @@ public class Main
         /*GiaoVu temp = new GiaoVu();
         temp.setName("PNST");
         GiaoVuDAO.addGiaoVu(temp);*/
-
         /*test app = new test();
         app.setVisible(true);*/
 
