@@ -7,6 +7,7 @@ import org.hibernate.query.Query;
 import pojo.Semester;
 import utils.HibernateUtil;
 
+import java.sql.Date;
 import java.util.List;
 
 public class SemesterDAO
@@ -48,8 +49,30 @@ public class SemesterDAO
         return sm;
     }
 
+    public static boolean anyCurrent()
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        int n = 0;
+        try {
+            final String hql = "select count(*) from Semester sm where sm.current = true";
+            Query query = session.createQuery(hql);
+            String t = query.uniqueResult().toString();
+            n = Integer.valueOf(t);
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
+            session.close();
+        }
+        if(n != 0)
+            return true;
+        else
+            return false;
+    }
+
     public static boolean addSemester(Semester sm)
     {
+        if(sm.isCurrent() && anyCurrent())
+            return false;
         Session session = HibernateUtil.getSessionFactory().openSession();
         if(Integer.toString(sm.getId()) != null)
             if(getSemester(sm.getId()) != null)
@@ -72,6 +95,8 @@ public class SemesterDAO
 
     public static boolean updateSemester(Semester sm)
     {
+        if(sm.isCurrent() && anyCurrent())
+            return false;
         Session session = HibernateUtil.getSessionFactory().openSession();
         if(getSemester(sm.getId()) == null)
             return false;
@@ -111,5 +136,23 @@ public class SemesterDAO
             session.close();
         }
         return true;
+    }
+
+    public static Semester getSemesterFromDate(Date d1, Date d2)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Semester temp = null;
+        try {
+            final String hql = "select sm from Semester sm where sm.dayStart = :d1 and sm.dayEnd = :d2";
+            Query query = session.createQuery(hql);
+            temp = (Semester) query.uniqueResult();
+        } catch (HibernateException e)
+        {
+            System.err.println(e);
+        } finally
+        {
+            session.close();
+        }
+        return temp;
     }
 }

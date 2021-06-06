@@ -9,6 +9,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Date;
 import java.util.List;
 
 public class gvFunction extends JFrame
@@ -43,6 +44,26 @@ public class gvFunction extends JFrame
     private JLabel sj_idLabel;
     private JLabel sj_nameLabel;
     private JLabel sj_creLabel;
+    private JTable smTable;
+    private JButton setCurBut3;
+    private JButton addBut3;
+    private JButton deleteBut3;
+    private JPanel semesterPane;
+    private JTextField sm_nameText;
+    private JTextField sm_yearText;
+    private JLabel sm_nameLabel;
+    private JLabel sm_yearLabel;
+    private JLabel sm_dayStartLabel;
+    private JLabel sm_dayEndLabel;
+    private JLabel sm_curLabel;
+    private JScrollPane smScroll;
+    private JComboBox sm_day_comboBox1;
+    private JComboBox sm_month_comboBox1;
+    private JComboBox sm_year_comboBox1;
+    private JComboBox sm_day_comboBox2;
+    private JComboBox sm_month_comboBox2;
+    private JComboBox sm_year_comboBox2;
+    private JComboBox sm_cur_comboBox;
 
     public gvFunction()
     {
@@ -249,6 +270,78 @@ public class gvFunction extends JFrame
             }
         });
 
-        //CAU 4
+        //CAU 4: HOC KI-----------------------------------------------------------------------------------
+        List<Semester> sms = SemesterDAO.getAllSemester();
+        DefaultTableModel semesterTable = new DefaultTableModel(null, new String[]{"id", "name", "year", "start date", "end date", "is current"}){
+            public boolean isCellEditable(int row, int column){ return false; }
+        };
+        smTable.setModel(semesterTable);
+        for (Semester i : sms) {
+            semesterTable.addRow(new Object[]{i.getId(), i.getName(), i.getYear(), i.getDayStart(), i.getDayEnd(), i.isCurrent()});
+        }
+
+        addBut3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //getting the date
+                StringBuilder date1 = new StringBuilder(), date2 = new StringBuilder();
+                date1.append(sm_year_comboBox1.getSelectedItem()); date1.append("-");
+                date1.append(sm_month_comboBox1.getSelectedItem()); date1.append("-");
+                date1.append(sm_day_comboBox1.getSelectedItem());
+                date2.append(sm_year_comboBox2.getSelectedItem()); date2.append("-");
+                date2.append(sm_month_comboBox2.getSelectedItem()); date2.append("-");
+                date2.append(sm_day_comboBox2.getSelectedItem());
+
+                String[] t = {sm_nameText.getText(), sm_yearText.getText(), date1.toString(), date2.toString(), String.valueOf(sm_cur_comboBox.getSelectedItem())};
+                if (t[0].equals("") || t[1].equals("")) {
+                    return;
+                }
+                Semester temp1 = new Semester();
+                try {
+                    temp1.setName(Integer.valueOf(t[0]));
+                    temp1.setYear(Integer.valueOf(t[1]));
+                    temp1.setDayStart(Date.valueOf(t[2]));
+                    temp1.setDayEnd(Date.valueOf(t[3]));
+                    temp1.setCurrent(t[4].equals("yes"));
+                } catch (Exception any_e) {
+                    JOptionPane.showMessageDialog(null, "Information was not enough or incorrect!");
+                    return;
+                }
+                if (SemesterDAO.addSemester(temp1)) {
+                    Semester temp2 = SemesterDAO.getSemesterFromDate(temp1.getDayStart(), temp1.getDayEnd());
+                    semesterTable.addRow(new Object[]{temp2.getId(), temp2.getName(), temp2.getDayStart(), temp2.getDayEnd(), temp2.isCurrent()});
+                    sm_nameText.setText("");
+                    sm_yearText.setText("");
+                } else
+                    JOptionPane.showMessageDialog(null, "Error! Cannot add this Semester!");
+            }
+        });
+        ListSelectionModel listSelectionModel3 = smTable.getSelectionModel();
+        listSelectionModel3.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listSelectionModel3.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                deleteBut3.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        SemesterDAO.deleteSemester((int)smTable.getValueAt(smTable.getSelectedRow(), 0));
+                        semesterTable.removeRow(smTable.getSelectedRow());
+                    }
+                });
+                setCurBut3.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        Semester temp = SemesterDAO.getSemesterFromDate(Date.valueOf(smTable.getValueAt(smTable.getSelectedRow(), 2).toString()), Date.valueOf(smTable.getValueAt(smTable.getSelectedRow(), 3).toString()));
+                        if(temp != null)
+                        {
+                            temp.setCurrent(true);
+                            if(!SemesterDAO.updateSemester(temp))
+                                JOptionPane.showMessageDialog(null, "Error! Cannot set this semester as current!");
+                        }
+                    }
+                });
+            }
+        });
+
     }
 }

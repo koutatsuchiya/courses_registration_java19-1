@@ -18,7 +18,10 @@ public class Main
         temp.setName("PNST");
         GiaoVuDAO.addGiaoVu(temp);*/
 
-        gvFunction myApp = new gvFunction();
-        myApp.setVisible(true);
+        /*test app = new test();
+        app.setVisible(true);*/
+
+        /*gvFunction myApp = new gvFunction();
+        myApp.setVisible(true);*/
     }
 }
