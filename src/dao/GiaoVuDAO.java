@@ -153,7 +153,7 @@ public class GiaoVuDAO
         List<GiaoVu> temp = new ArrayList<>();
         String t = val.toLowerCase();
         for (GiaoVu i : gvs)
-            if(String.valueOf(i.getId()).toLowerCase().contains(t) || i.getName().toLowerCase().contains(t))
+            if(String.valueOf(i.getId()).contains(t) || i.getName().toLowerCase().contains(t))
                 temp.add(i);
         return temp;
     }

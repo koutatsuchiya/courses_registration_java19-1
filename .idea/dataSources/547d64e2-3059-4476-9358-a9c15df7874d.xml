@@ -794,7 +794,7 @@ false Zulu
     <database id="3" parent="1" name="registration">
       <ObjectId>16394</ObjectId>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>714</IntrospectionStateNumber>
+      <IntrospectionStateNumber>804</IntrospectionStateNumber>
       <Current>1</Current>
     </database>
     <role id="4" parent="1" name="pg_execute_server_program">
@@ -865,7 +865,7 @@ UC/10
 </Acl>
       <StateNumber>287</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>715</IntrospectionStateNumber>
+      <IntrospectionStateNumber>805</IntrospectionStateNumber>
       <Current>1</Current>
     </schema>
     <extension id="18" parent="3" name="plpgsql">
@@ -1066,16 +1066,18 @@ UC/10
       <CollationIds>0</CollationIds>
       <ClassIds>1978</ClassIds>
     </index>
-    <index id="46" parent="30" name="course_weekday_shift_semester_id_key">
-      <ObjectId>16579</ObjectId>
-      <StateNumber>664</StateNumber>
-      <ColNames>weekday
+    <index id="46" parent="30" name="course_subject_id_weekday_shift_semester_id_key">
+      <ObjectId>16588</ObjectId>
+      <StateNumber>803</StateNumber>
+      <ColNames>subject_id
+weekday
 shift
 semester_id</ColNames>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
-      <CollationIds>0,0,0</CollationIds>
-      <ClassIds>1978,1978,1978</ClassIds>
+      <CollationIds>100,0,0,0</CollationIds>
+      <CollationNames>default</CollationNames>
+      <ClassIds>3126,1978,1978,1978</ClassIds>
     </index>
     <key id="47" parent="30" name="course_pkey">
       <ObjectId>16571</ObjectId>
@@ -1084,13 +1086,14 @@ semester_id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>course_pkey</UnderlyingIndexName>
     </key>
-    <key id="48" parent="30" name="course_weekday_shift_semester_id_key">
-      <ObjectId>16580</ObjectId>
-      <StateNumber>664</StateNumber>
-      <ColNames>weekday
+    <key id="48" parent="30" name="course_subject_id_weekday_shift_semester_id_key">
+      <ObjectId>16589</ObjectId>
+      <StateNumber>803</StateNumber>
+      <ColNames>subject_id
+weekday
 shift
 semester_id</ColNames>
-      <UnderlyingIndexName>course_weekday_shift_semester_id_key</UnderlyingIndexName>
+      <UnderlyingIndexName>course_subject_id_weekday_shift_semester_id_key</UnderlyingIndexName>
     </key>
     <check id="49" parent="30" name="course_shift_check">
       <ObjectId>16566</ObjectId>

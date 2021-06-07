@@ -97,7 +97,7 @@ public class gvFunction extends JFrame
     private JTextField crs_gvltText;
     private JTextField crs_roomText;
     private JTextField crs_slotText;
-    private JTextField textField6;
+    private JTextField crs_sm_idText;
     private JComboBox crs_weekday_comboBox;
     private JComboBox crs_shift_comboBox;
     private JTextField findText7;
@@ -112,6 +112,7 @@ public class gvFunction extends JFrame
     private JPanel coursePane;
     private JScrollPane crsScroll;
     private JPanel crsForm;
+    private JButton curBut7;
 
     public gvFunction()
     {
@@ -119,7 +120,7 @@ public class gvFunction extends JFrame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPane);
         this.pack();
-        this.setBounds(500, 150, 600, 500);
+        this.setBounds(200, 150, 1000, 500);
         this.setResizable(false);
 
         //CAU 2: GV ACCOUNT-----------------------------------------------------------------------
@@ -511,41 +512,60 @@ public class gvFunction extends JFrame
 
         //CAU 8: COURSE------------------------------------------------------------------------------------------
         List<Course> crs = CourseDAO.getAllCourse();
-        DefaultTableModel courseTable = new DefaultTableModel(null, new String[]{"id", "subject id", "subject name", "subject credits", "gvlt", "room", "weekday", "shift", "slot"}){
+        DefaultTableModel courseTable = new DefaultTableModel(null, new String[]{"id", "subject id", "subject name", "subject credits", "gvlt", "room", "weekday", "shift", "slot", "semester name", "year"}){
             public boolean isCellEditable(int row, int column){ return false; }
         };
         crsTable.setModel(courseTable);
         for (Course i : crs) {
-            Subject t = SubjectDAO.getSubject(i.getSubjectId());
-            courseTable.addRow(new Object[]{i.getId(), t.getId(), t.getName(), t.getCredits(), i.getGvlt(), i.getRoom(), i.getWeekday(), i.getShift(), i.getSlot()});
+            Subject t1 = SubjectDAO.getSubject(i.getSubjectId());
+            Semester t2 = SemesterDAO.getSemester(i.getSemesterId());
+            courseTable.addRow(new Object[]{i.getId(), t1.getId(), t1.getName(), t1.getCredits(), i.getGvlt(), i.getRoom(), i.getWeekday(), i.getShift(), i.getSlot(), t2.getName(), t2.getYear()});
         }
 
         addBut7.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String[] t = {};
-                if(t.equals("")) { return; }
+                String[] t = {crs_sj_idText.getText(), crs_gvltText.getText(), crs_roomText.getText(), String.valueOf(crs_weekday_comboBox.getSelectedItem()), String.valueOf(crs_shift_comboBox.getSelectedItem()), crs_slotText.getText(), crs_sm_idText.getText()};
+                if(t[0].equals("") || t[1].equals("") || t[2].equals("") || t[5].equals("") || t[6].equals("")) { return; }
                 Course temp1 = new Course();
-                temp1.
+                try {
+                    temp1.setSubjectId(t[0]);
+                    temp1.setGvlt(t[1]);
+                    temp1.setRoom(t[2]);
+                    temp1.setWeekday(Integer.valueOf(t[3]));
+                    temp1.setShift(Integer.valueOf(t[4]));
+                    temp1.setSlot(Integer.valueOf(t[5]));
+                    temp1.setSemesterId(Integer.valueOf(t[6]));
+                } catch(Exception any_e) {
+                    JOptionPane.showMessageDialog(null, "Number format was incorrect!");
+                    return;
+                }
                 if(CourseDAO.addCourse(temp1))
                 {
-                    Course temp2 = CourseDAO
-                    courseTable.addRow(new Object[]{temp2.getId(),
+                    Course temp2 = CourseDAO.getUniqueCourse(temp1.getSubjectId(), temp1.getWeekday(), temp1.getShift(), temp1.getSemesterId());
+                    Subject temp_sj = SubjectDAO.getSubject(temp2.getSubjectId());
+                    Semester temp_sm = SemesterDAO.getSemester(temp2.getSemesterId());
+                    courseTable.addRow(new Object[]{temp2.getId(), temp_sj.getId(), temp_sj.getName(), temp_sj.getCredits(), temp2.getGvlt(), temp2.getRoom(), temp2.getWeekday(), temp2.getShift(), temp2.getSlot(), temp_sm.getName(), temp_sm.getYear()});
+                    crs_sj_idText.setText("");
+                    crs_gvltText.setText("");
+                    crs_roomText.setText("");
+                    crs_slotText.setText("");
+                    crs_sm_idText.setText("");
                 }
                 else
-                    JOptionPane.showMessageDialog(null, "Error! Cannot add class!");
+                    JOptionPane.showMessageDialog(null, "Error! Cannot add course!");
             }
         });
-        ListSelectionModel listSelectionModel4 = crsTable.getSelectionModel();
-        listSelectionModel4.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listSelectionModel4.addListSelectionListener(new ListSelectionListener() {
+        ListSelectionModel listSelectionModel7 = crsTable.getSelectionModel();
+        listSelectionModel7.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listSelectionModel7.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 deleteBut7.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         CourseDAO.deleteCourse((Integer) crsTable.getValueAt(crsTable.getSelectedRow(), 0));
-                        CourseTable.removeRow(crsTable.getSelectedRow());
+                        courseTable.removeRow(crsTable.getSelectedRow());
                     }
                 });
             }
@@ -553,17 +573,52 @@ public class gvFunction extends JFrame
         resetBut7.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int n_row = CourseTable.getRowCount();
+                int n_row = courseTable.getRowCount();
                 for(int i = n_row - 1; i >= 0; i--)
-                    CourseTable.removeRow(i);
+                    courseTable.removeRow(i);
                 List<Course> rs = CourseDAO.getAllCourse();
                 for(Course i : rs) {
-                    int n = CourseDAO.countMale(i.getId());
-                    int m = CourseDAO.countFemale(i.getId());
-                    int total = n + m;
-                    CourseTable.addRow(new Object[]{i.getId(), i.getName(), n, m, total});
+                    Subject t1 = SubjectDAO.getSubject(i.getSubjectId());
+                    Semester t2 = SemesterDAO.getSemester(i.getSemesterId());
+                    courseTable.addRow(new Object[]{i.getId(), t1.getId(), t1.getName(), t1.getCredits(), i.getGvlt(), i.getRoom(), i.getWeekday(), i.getShift(), i.getSlot(), t2.getName(), t2.getYear()});
                 }
-                class_nameText.setText("");
+                crs_sj_idText.setText("");
+                crs_gvltText.setText("");
+                crs_roomText.setText("");
+                crs_slotText.setText("");
+                crs_sm_idText.setText("");
+            }
+        });
+        curBut7.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int n_row = courseTable.getRowCount();
+                for(int i = n_row - 1; i >= 0; i--)
+                    courseTable.removeRow(i);
+                List<Course> rs = CourseDAO.getAllCourse();
+                for(Course i : rs)
+                    if(CourseDAO.isOpen(i.getId()))
+                    {
+                        Subject t1 = SubjectDAO.getSubject(i.getSubjectId());
+                        Semester t2 = SemesterDAO.getSemester(i.getSemesterId());
+                        courseTable.addRow(new Object[]{i.getId(), t1.getId(), t1.getName(), t1.getCredits(), i.getGvlt(), i.getRoom(), i.getWeekday(), i.getShift(), i.getSlot(), t2.getName(), t2.getYear()});
+                    }
+            }
+        });
+        findBut7.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String t = findText7.getText();
+                if(t.equals("")) { return; }
+                List<Course> found = CourseDAO.getCoursesFromString(t);
+                int n_row = courseTable.getRowCount();
+                for(int i = n_row - 1; i >= 0; i--)
+                    courseTable.removeRow(i);
+                for(Course i : found) {
+                    Subject t1 = SubjectDAO.getSubject(i.getSubjectId());
+                    Semester t2 = SemesterDAO.getSemester(i.getSemesterId());
+                    courseTable.addRow(new Object[]{i.getId(), t1.getId(), t1.getName(), t1.getCredits(), i.getGvlt(), i.getRoom(), i.getWeekday(), i.getShift(), i.getSlot(), t2.getName(), t2.getYear()});
+                }
             }
         });
     }

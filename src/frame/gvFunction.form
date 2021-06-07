@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="mainPane" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="659" height="444"/>
+      <xy x="20" y="20" width="659" height="479"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -895,7 +895,7 @@
               </grid>
             </children>
           </grid>
-          <grid id="3da95" binding="coursePane" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="3da95" binding="coursePane" layout-manager="GridLayoutManager" row-count="6" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Course"/>
@@ -905,7 +905,7 @@
             <children>
               <scrollpane id="78958" binding="crsScroll">
                 <constraints>
-                  <grid row="1" column="0" row-span="4" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="0" row-span="5" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -943,7 +943,7 @@
               <grid id="393c4" binding="crsForm" layout-manager="GridLayoutManager" row-count="7" column-count="9" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -1036,7 +1036,7 @@
                     </constraints>
                     <properties/>
                   </component>
-                  <component id="720bd" class="javax.swing.JTextField" binding="textField6" default-binding="true">
+                  <component id="720bd" class="javax.swing.JTextField" binding="crs_sm_idText">
                     <constraints>
                       <grid row="6" column="1" row-span="1" col-span="8" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
@@ -1089,6 +1089,14 @@
                 </constraints>
                 <properties>
                   <text value="Find"/>
+                </properties>
+              </component>
+              <component id="3f321" class="javax.swing.JButton" binding="curBut7">
+                <constraints>
+                  <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Currently Open"/>
                 </properties>
               </component>
             </children>
