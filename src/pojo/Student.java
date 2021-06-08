@@ -8,6 +8,7 @@ public class Student {
     private String name;
     private String gender;
     private LopHoc classId;
+    private String password;
 
     public int getId() {
         return id;
@@ -43,17 +44,21 @@ public class Student {
 
     public void setClassId(LopHoc classId) { this.classId = classId; }
 
+    public String getPassword() { return password; }
+
+    public void setPassword(String password) { this.password = password; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return id == student.id && Objects.equals(mssv, student.mssv) && Objects.equals(name, student.name) && Objects.equals(gender, student.gender) && Objects.equals(classId, student.classId);
+        return id == student.id && Objects.equals(mssv, student.mssv) && Objects.equals(name, student.name) && Objects.equals(gender, student.gender) && Objects.equals(classId, student.classId) && Objects.equals(password, student.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, mssv, name, gender, classId);
+        return Objects.hash(id, mssv, name, gender, classId, password);
     }
 
     @Override
@@ -64,6 +69,7 @@ public class Student {
                 ", name='" + name + '\'' +
                 ", gender='" + gender + '\'' +
                 ", lop=" + classId.toString() +
+                ", password =" + password +
                 '}';
     }
 }

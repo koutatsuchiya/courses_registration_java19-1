@@ -86,7 +86,7 @@ public class CourseDAO
             return false;
         //add
         Session session = HibernateUtil.getSessionFactory().openSession();
-        if(Integer.toString(course.getId()) != null)
+        if(!Integer.toString(course.getId()).equals(""))
             if(getCourse(course.getId()) != null)
                 return false;
         Transaction transaction = null;

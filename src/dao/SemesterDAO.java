@@ -70,7 +70,7 @@ public class SemesterDAO
         if(sm.isCurrent() && anyCurrent())
             return false;
         Session session = HibernateUtil.getSessionFactory().openSession();
-        if(Integer.toString(sm.getId()) != null)
+        if(!Integer.toString(sm.getId()).equals(""))
             if(getSemester(sm.getId()) != null)
                 return false;
         Transaction transaction = null;

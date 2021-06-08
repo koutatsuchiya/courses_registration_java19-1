@@ -21,5 +21,8 @@
         <many-to-one class="pojo.LopHoc" name="classId" column="class_id"
                      fetch="join" lazy="false">
         </many-to-one>
+        <property name="password">
+            <column name="password" sql-type="varchar"/>
+        </property>
     </class>
 </hibernate-mapping>

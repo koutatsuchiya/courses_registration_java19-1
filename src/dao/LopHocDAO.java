@@ -52,7 +52,7 @@ public class LopHocDAO
     {
         //add
         Session session = HibernateUtil.getSessionFactory().openSession();
-        if(Integer.toString(lh.getId()) != null)
+        if(!Integer.toString(lh.getId()).equals(""))
             if(getLopHoc(lh.getId()) != null)
                 return false;
         Transaction transaction = null;

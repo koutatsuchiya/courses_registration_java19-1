@@ -49,8 +49,9 @@ public class StudentDAO
 
     public static boolean addStudent(Student st)
     {
+        st.setPassword(st.getMssv());
         Session session = HibernateUtil.getSessionFactory().openSession();
-        if(Integer.toString(st.getId()) != null)
+        if(!Integer.toString(st.getId()).equals(""))
             if(getStudent(st.getId()) != null)
                 return false;
         Transaction transaction = null;
@@ -112,17 +113,36 @@ public class StudentDAO
         return true;
     }
 
-    public static Student getStudentFromMssv(String st_mssv)
+    public static Student getUniqueStudent(String st_mssv, String st_name)
     {
         //open session
         Session session = HibernateUtil.getSessionFactory().openSession();
         Student st = null;
         try {
-            //create query
-            final String hql = "select st from Student st where st.mssv = :st_mssv";
+            final String hql = "select st from Student st where st.mssv = :st_mssv and st.name = :st_name";
             Query query = session.createQuery(hql);
             query.setParameter("st_mssv", st_mssv);
-            //get all Student
+            query.setParameter("st_name", st_name);
+            st = (Student)query.uniqueResult();
+        } catch (HibernateException e)
+        {
+            System.err.println(e);
+        } finally {
+            session.close();
+        }
+        return st;
+    }
+
+    public static Student getLogInStudent(String st_mssv, String st_pass)
+    {
+        //open session
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Student st = null;
+        try {
+            final String hql = "select st from Student st where st.mssv = :st_mssv and st.password = :st_pass";
+            Query query = session.createQuery(hql);
+            query.setParameter("st_mssv", st_mssv);
+            query.setParameter("st_pass", st_pass);
             st = (Student)query.uniqueResult();
         } catch (HibernateException e)
         {

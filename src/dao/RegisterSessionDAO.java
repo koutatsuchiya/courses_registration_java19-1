@@ -52,7 +52,7 @@ public class RegisterSessionDAO
     public static boolean addRegisterSession(RegisterSession rs)
     {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        if(Integer.toString(rs.getId()) != null)
+        if(!Integer.toString(rs.getId()).equals(""))
             if(getRegisterSession(rs.getId()) != null)
                 return false;
         Transaction transaction = null;

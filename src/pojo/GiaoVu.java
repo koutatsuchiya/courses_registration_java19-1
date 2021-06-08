@@ -5,6 +5,7 @@ import java.util.Objects;
 public class GiaoVu {
     private int id;
     private String name;
+    private String password;
 
     public int getId() {
         return id;
@@ -22,24 +23,29 @@ public class GiaoVu {
         this.name = name;
     }
 
+    public String getPassword() { return password; }
+
+    public void setPassword(String password) { this.password = password; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GiaoVu giaoVu = (GiaoVu) o;
-        return id == giaoVu.id && Objects.equals(name, giaoVu.name);
+        return id == giaoVu.id && Objects.equals(name, giaoVu.name) && Objects.equals(password, giaoVu.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, name, password);
     }
 
     @Override
     public String toString() {
         return "{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+                ", name='" + name +
+                "', password=" + password +
+                "}";
     }
 }

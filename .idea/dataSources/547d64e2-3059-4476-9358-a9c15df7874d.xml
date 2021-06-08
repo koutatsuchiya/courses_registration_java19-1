@@ -794,7 +794,7 @@ false Zulu
     <database id="3" parent="1" name="registration">
       <ObjectId>16394</ObjectId>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>804</IntrospectionStateNumber>
+      <IntrospectionStateNumber>830</IntrospectionStateNumber>
       <Current>1</Current>
     </database>
     <role id="4" parent="1" name="pg_execute_server_program">
@@ -865,7 +865,7 @@ UC/10
 </Acl>
       <StateNumber>287</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>805</IntrospectionStateNumber>
+      <IntrospectionStateNumber>831</IntrospectionStateNumber>
       <Current>1</Current>
     </schema>
     <extension id="18" parent="3" name="plpgsql">
@@ -973,7 +973,7 @@ UC/10
     <table id="31" parent="17" name="giao_vu">
       <ObjectId>16471</ObjectId>
       <Owner>postgres</Owner>
-      <StateNumber>568</StateNumber>
+      <StateNumber>827</StateNumber>
     </table>
     <table id="32" parent="17" name="lop_hoc">
       <ObjectId>16508</ObjectId>
@@ -985,78 +985,83 @@ UC/10
       <Owner>postgres</Owner>
       <StateNumber>645</StateNumber>
     </table>
-    <table id="34" parent="17" name="semester">
+    <table id="34" parent="17" name="registered">
+      <ObjectId>16590</ObjectId>
+      <Owner>postgres</Owner>
+      <StateNumber>824</StateNumber>
+    </table>
+    <table id="35" parent="17" name="semester">
       <ObjectId>16481</ObjectId>
       <Owner>postgres</Owner>
       <StateNumber>642</StateNumber>
     </table>
-    <table id="35" parent="17" name="student">
+    <table id="36" parent="17" name="student">
       <ObjectId>16499</ObjectId>
       <Owner>postgres</Owner>
-      <StateNumber>616</StateNumber>
+      <StateNumber>817</StateNumber>
     </table>
-    <table id="36" parent="17" name="subject">
+    <table id="37" parent="17" name="subject">
       <ObjectId>16428</ObjectId>
       <Owner>postgres</Owner>
       <StateNumber>662</StateNumber>
     </table>
-    <column id="37" parent="30" name="id">
+    <column id="38" parent="30" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>662</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="38" parent="30" name="subject_id">
+    <column id="39" parent="30" name="subject_id">
       <Position>2</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>662</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="39" parent="30" name="gvlt">
+    <column id="40" parent="30" name="gvlt">
       <Position>3</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>662</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="40" parent="30" name="room">
+    <column id="41" parent="30" name="room">
       <Position>4</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>662</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="41" parent="30" name="weekday">
+    <column id="42" parent="30" name="weekday">
       <Position>5</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>662</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="42" parent="30" name="shift">
+    <column id="43" parent="30" name="shift">
       <Position>6</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>662</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="43" parent="30" name="slot">
+    <column id="44" parent="30" name="slot">
       <Position>7</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>662</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="44" parent="30" name="semester_id">
+    <column id="45" parent="30" name="semester_id">
       <Position>8</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>664</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <index id="45" parent="30" name="course_pkey">
+    <index id="46" parent="30" name="course_pkey">
       <ObjectId>16570</ObjectId>
       <StateNumber>662</StateNumber>
       <ColNames>id</ColNames>
@@ -1066,7 +1071,7 @@ UC/10
       <CollationIds>0</CollationIds>
       <ClassIds>1978</ClassIds>
     </index>
-    <index id="46" parent="30" name="course_subject_id_weekday_shift_semester_id_key">
+    <index id="47" parent="30" name="course_subject_id_weekday_shift_semester_id_key">
       <ObjectId>16588</ObjectId>
       <StateNumber>803</StateNumber>
       <ColNames>subject_id
@@ -1079,14 +1084,14 @@ semester_id</ColNames>
       <CollationNames>default</CollationNames>
       <ClassIds>3126,1978,1978,1978</ClassIds>
     </index>
-    <key id="47" parent="30" name="course_pkey">
+    <key id="48" parent="30" name="course_pkey">
       <ObjectId>16571</ObjectId>
       <StateNumber>662</StateNumber>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>course_pkey</UnderlyingIndexName>
     </key>
-    <key id="48" parent="30" name="course_subject_id_weekday_shift_semester_id_key">
+    <key id="49" parent="30" name="course_subject_id_weekday_shift_semester_id_key">
       <ObjectId>16589</ObjectId>
       <StateNumber>803</StateNumber>
       <ColNames>subject_id
@@ -1095,33 +1100,40 @@ shift
 semester_id</ColNames>
       <UnderlyingIndexName>course_subject_id_weekday_shift_semester_id_key</UnderlyingIndexName>
     </key>
-    <check id="49" parent="30" name="course_shift_check">
+    <check id="50" parent="30" name="course_shift_check">
       <ObjectId>16566</ObjectId>
       <StateNumber>662</StateNumber>
       <ColNames>shift</ColNames>
       <Predicate>shift = ANY (ARRAY[1, 2, 3, 4])</Predicate>
     </check>
-    <check id="50" parent="30" name="course_weekday_check">
+    <check id="51" parent="30" name="course_weekday_check">
       <ObjectId>16565</ObjectId>
       <StateNumber>662</StateNumber>
       <ColNames>weekday</ColNames>
       <Predicate>weekday = ANY (ARRAY[2, 3, 4, 5, 6, 7, 8])</Predicate>
     </check>
-    <column id="51" parent="31" name="id">
+    <column id="52" parent="31" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>568</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="52" parent="31" name="name">
+    <column id="53" parent="31" name="name">
       <Position>2</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>568</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="53" parent="31" name="giao_vu_pkey">
+    <column id="54" parent="31" name="password">
+      <Position>3</Position>
+      <DataType>varchar|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>829</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="55" parent="31" name="giao_vu_pkey">
       <ObjectId>16477</ObjectId>
       <StateNumber>568</StateNumber>
       <ColNames>id</ColNames>
@@ -1131,7 +1143,7 @@ semester_id</ColNames>
       <CollationIds>0</CollationIds>
       <ClassIds>1978</ClassIds>
     </index>
-    <index id="54" parent="31" name="unique_namegv">
+    <index id="56" parent="31" name="unique_namegv">
       <ObjectId>16479</ObjectId>
       <StateNumber>568</StateNumber>
       <ColNames>name</ColNames>
@@ -1141,34 +1153,34 @@ semester_id</ColNames>
       <CollationNames>default</CollationNames>
       <ClassIds>3126</ClassIds>
     </index>
-    <key id="55" parent="31" name="giao_vu_pkey">
+    <key id="57" parent="31" name="giao_vu_pkey">
       <ObjectId>16478</ObjectId>
       <StateNumber>568</StateNumber>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>giao_vu_pkey</UnderlyingIndexName>
     </key>
-    <key id="56" parent="31" name="unique_namegv">
+    <key id="58" parent="31" name="unique_namegv">
       <ObjectId>16480</ObjectId>
       <StateNumber>568</StateNumber>
       <ColNames>name</ColNames>
       <UnderlyingIndexName>unique_namegv</UnderlyingIndexName>
     </key>
-    <column id="57" parent="32" name="id">
+    <column id="59" parent="32" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>607</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="58" parent="32" name="name">
+    <column id="60" parent="32" name="name">
       <Position>2</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>607</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="59" parent="32" name="class_pkey">
+    <index id="61" parent="32" name="class_pkey">
       <ObjectId>16514</ObjectId>
       <StateNumber>607</StateNumber>
       <ColNames>id</ColNames>
@@ -1178,7 +1190,7 @@ semester_id</ColNames>
       <CollationIds>0</CollationIds>
       <ClassIds>1978</ClassIds>
     </index>
-    <index id="60" parent="32" name="lop_hoc_name_key">
+    <index id="62" parent="32" name="lop_hoc_name_key">
       <ObjectId>16586</ObjectId>
       <StateNumber>713</StateNumber>
       <ColNames>name</ColNames>
@@ -1188,48 +1200,48 @@ semester_id</ColNames>
       <CollationNames>default</CollationNames>
       <ClassIds>3126</ClassIds>
     </index>
-    <key id="61" parent="32" name="class_pkey">
+    <key id="63" parent="32" name="class_pkey">
       <ObjectId>16515</ObjectId>
       <StateNumber>607</StateNumber>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>class_pkey</UnderlyingIndexName>
     </key>
-    <key id="62" parent="32" name="lop_hoc_name_key">
+    <key id="64" parent="32" name="lop_hoc_name_key">
       <ObjectId>16587</ObjectId>
       <StateNumber>713</StateNumber>
       <ColNames>name</ColNames>
       <UnderlyingIndexName>lop_hoc_name_key</UnderlyingIndexName>
     </key>
-    <column id="63" parent="33" name="id">
+    <column id="65" parent="33" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>642</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="64" parent="33" name="day_start">
+    <column id="66" parent="33" name="day_start">
       <Position>5</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>645</StateNumber>
       <TypeId>1082</TypeId>
     </column>
-    <column id="65" parent="33" name="day_end">
+    <column id="67" parent="33" name="day_end">
       <Position>6</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>645</StateNumber>
       <TypeId>1082</TypeId>
     </column>
-    <column id="66" parent="33" name="semester_id">
+    <column id="68" parent="33" name="semester_id">
       <Position>7</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>645</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <index id="67" parent="33" name="register_session_pkey">
+    <index id="69" parent="33" name="register_session_pkey">
       <ObjectId>16548</ObjectId>
       <StateNumber>642</StateNumber>
       <ColNames>id</ColNames>
@@ -1239,7 +1251,7 @@ semester_id</ColNames>
       <CollationIds>0</CollationIds>
       <ClassIds>1978</ClassIds>
     </index>
-    <index id="68" parent="33" name="unique_session">
+    <index id="70" parent="33" name="unique_session">
       <ObjectId>16555</ObjectId>
       <StateNumber>645</StateNumber>
       <ColNames>day_start
@@ -1249,21 +1261,21 @@ day_end</ColNames>
       <CollationIds>0,0</CollationIds>
       <ClassIds>3122,3122</ClassIds>
     </index>
-    <key id="69" parent="33" name="register_session_pkey">
+    <key id="71" parent="33" name="register_session_pkey">
       <ObjectId>16549</ObjectId>
       <StateNumber>642</StateNumber>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>register_session_pkey</UnderlyingIndexName>
     </key>
-    <key id="70" parent="33" name="unique_session">
+    <key id="72" parent="33" name="unique_session">
       <ObjectId>16556</ObjectId>
       <StateNumber>645</StateNumber>
       <ColNames>day_start
 day_end</ColNames>
       <UnderlyingIndexName>unique_session</UnderlyingIndexName>
     </key>
-    <foreign-key id="71" parent="33" name="fk_session_semester">
+    <foreign-key id="73" parent="33" name="fk_session_semester">
       <ObjectId>16557</ObjectId>
       <StateNumber>646</StateNumber>
       <ColNames>semester_id</ColNames>
@@ -1273,49 +1285,104 @@ day_end</ColNames>
       <RefKeyName>semester_pkey</RefKeyName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="72" parent="34" name="id">
+    <column id="74" parent="34" name="id">
+      <Position>1</Position>
+      <DataType>integer|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>824</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="75" parent="34" name="student_id">
+      <Position>2</Position>
+      <DataType>integer|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>824</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="76" parent="34" name="course_id">
+      <Position>3</Position>
+      <DataType>integer|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>824</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <index id="77" parent="34" name="registered_pkey">
+      <ObjectId>16593</ObjectId>
+      <StateNumber>824</StateNumber>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+      <Primary>1</Primary>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationIds>0</CollationIds>
+      <ClassIds>1978</ClassIds>
+    </index>
+    <index id="78" parent="34" name="registered_student_id_course_id_key">
+      <ObjectId>16595</ObjectId>
+      <StateNumber>824</StateNumber>
+      <ColNames>student_id
+course_id</ColNames>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationIds>0,0</CollationIds>
+      <ClassIds>1978,1978</ClassIds>
+    </index>
+    <key id="79" parent="34" name="registered_pkey">
+      <ObjectId>16594</ObjectId>
+      <StateNumber>824</StateNumber>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>registered_pkey</UnderlyingIndexName>
+    </key>
+    <key id="80" parent="34" name="registered_student_id_course_id_key">
+      <ObjectId>16596</ObjectId>
+      <StateNumber>824</StateNumber>
+      <ColNames>student_id
+course_id</ColNames>
+      <UnderlyingIndexName>registered_student_id_course_id_key</UnderlyingIndexName>
+    </key>
+    <column id="81" parent="35" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>574</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="73" parent="34" name="name">
+    <column id="82" parent="35" name="name">
       <Position>2</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>574</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="74" parent="34" name="year">
+    <column id="83" parent="35" name="year">
       <Position>3</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>574</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="75" parent="34" name="day_start">
+    <column id="84" parent="35" name="day_start">
       <Position>4</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>579</StateNumber>
       <TypeId>1082</TypeId>
     </column>
-    <column id="76" parent="34" name="day_end">
+    <column id="85" parent="35" name="day_end">
       <Position>5</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>580</StateNumber>
       <TypeId>1082</TypeId>
     </column>
-    <column id="77" parent="34" name="current">
+    <column id="86" parent="35" name="current">
       <Position>7</Position>
       <DataType>boolean|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>637</StateNumber>
       <TypeId>16</TypeId>
     </column>
-    <index id="78" parent="34" name="semester_pkey">
+    <index id="87" parent="35" name="semester_pkey">
       <ObjectId>16485</ObjectId>
       <StateNumber>574</StateNumber>
       <ColNames>id</ColNames>
@@ -1325,7 +1392,7 @@ day_end</ColNames>
       <CollationIds>0</CollationIds>
       <ClassIds>1978</ClassIds>
     </index>
-    <index id="79" parent="34" name="unique_semester">
+    <index id="88" parent="35" name="unique_semester">
       <ObjectId>16540</ObjectId>
       <StateNumber>641</StateNumber>
       <ColNames>name
@@ -1335,62 +1402,69 @@ year</ColNames>
       <CollationIds>0,0</CollationIds>
       <ClassIds>1978,1978</ClassIds>
     </index>
-    <key id="80" parent="34" name="semester_pkey">
+    <key id="89" parent="35" name="semester_pkey">
       <ObjectId>16486</ObjectId>
       <StateNumber>574</StateNumber>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>semester_pkey</UnderlyingIndexName>
     </key>
-    <key id="81" parent="34" name="unique_semester">
+    <key id="90" parent="35" name="unique_semester">
       <ObjectId>16541</ObjectId>
       <StateNumber>641</StateNumber>
       <ColNames>name
 year</ColNames>
       <UnderlyingIndexName>unique_semester</UnderlyingIndexName>
     </key>
-    <check id="82" parent="34" name="check_semester">
+    <check id="91" parent="35" name="check_semester">
       <ObjectId>16484</ObjectId>
       <StateNumber>574</StateNumber>
       <ColNames>name</ColNames>
       <Predicate>name = ANY (ARRAY[1, 2, 3])</Predicate>
     </check>
-    <column id="83" parent="35" name="id">
+    <column id="92" parent="36" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>603</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="84" parent="35" name="mssv">
+    <column id="93" parent="36" name="mssv">
       <Position>2</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>603</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="85" parent="35" name="name">
+    <column id="94" parent="36" name="name">
       <Position>3</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>603</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="86" parent="35" name="gender">
+    <column id="95" parent="36" name="gender">
       <Position>4</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>603</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="87" parent="35" name="class_id">
+    <column id="96" parent="36" name="class_id">
       <Position>6</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>612</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <index id="88" parent="35" name="student_pkey">
+    <column id="97" parent="36" name="password">
+      <Position>8</Position>
+      <DataType>varchar|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>819</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="98" parent="36" name="student_pkey">
       <ObjectId>16506</ObjectId>
       <StateNumber>603</StateNumber>
       <ColNames>id</ColNames>
@@ -1400,7 +1474,7 @@ year</ColNames>
       <CollationIds>0</CollationIds>
       <ClassIds>1978</ClassIds>
     </index>
-    <index id="89" parent="35" name="unique_st">
+    <index id="99" parent="36" name="unique_st">
       <ObjectId>16538</ObjectId>
       <StateNumber>631</StateNumber>
       <ColNames>mssv
@@ -1412,21 +1486,21 @@ name</ColNames>
 default</CollationNames>
       <ClassIds>3126,3126</ClassIds>
     </index>
-    <key id="90" parent="35" name="student_pkey">
+    <key id="100" parent="36" name="student_pkey">
       <ObjectId>16507</ObjectId>
       <StateNumber>603</StateNumber>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>student_pkey</UnderlyingIndexName>
     </key>
-    <key id="91" parent="35" name="unique_st">
+    <key id="101" parent="36" name="unique_st">
       <ObjectId>16539</ObjectId>
       <StateNumber>631</StateNumber>
       <ColNames>mssv
 name</ColNames>
       <UnderlyingIndexName>unique_st</UnderlyingIndexName>
     </key>
-    <foreign-key id="92" parent="35" name="fk_st_class">
+    <foreign-key id="102" parent="36" name="fk_st_class">
       <ObjectId>16533</ObjectId>
       <StateNumber>618</StateNumber>
       <ColNames>class_id</ColNames>
@@ -1436,34 +1510,34 @@ name</ColNames>
       <RefKeyName>class_pkey</RefKeyName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <check id="93" parent="35" name="check_gender">
+    <check id="103" parent="36" name="check_gender">
       <ObjectId>16502</ObjectId>
       <StateNumber>603</StateNumber>
       <ColNames>gender</ColNames>
       <Predicate>(gender)::text = ANY ((ARRAY[&apos;Nam&apos;::character varying, &apos;Nu&apos;::character varying])::text[])</Predicate>
     </check>
-    <column id="94" parent="36" name="id">
+    <column id="104" parent="37" name="id">
       <Position>1</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>537</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="95" parent="36" name="name">
+    <column id="105" parent="37" name="name">
       <Position>2</Position>
       <DataType>varchar|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>537</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="96" parent="36" name="credits">
+    <column id="106" parent="37" name="credits">
       <Position>3</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <StateNumber>537</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <index id="97" parent="36" name="subject_pkey">
+    <index id="107" parent="37" name="subject_pkey">
       <ObjectId>16434</ObjectId>
       <StateNumber>537</StateNumber>
       <ColNames>id</ColNames>
@@ -1474,7 +1548,7 @@ name</ColNames>
       <CollationNames>default</CollationNames>
       <ClassIds>3126</ClassIds>
     </index>
-    <key id="98" parent="36" name="subject_pkey">
+    <key id="108" parent="37" name="subject_pkey">
       <ObjectId>16435</ObjectId>
       <StateNumber>537</StateNumber>
       <ColNames>id</ColNames>

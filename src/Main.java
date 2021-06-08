@@ -14,14 +14,12 @@ public class Main
 {
     public static void main(String[] args)
     {
-        /*GiaoVu temp = new GiaoVu();
-        temp.setName("PNST");
-        GiaoVuDAO.addGiaoVu(temp);*/
-        //System.out.println(CourseDAO.isOpen(1));
-        /*test app = new test();
-        app.setVisible(true);*/
+        List<GiaoVu> t = GiaoVuDAO.getAllGiaoVu();
+        for (GiaoVu i : t)
+            System.out.println(i.toString());
 
-        gvFunction myApp = new gvFunction();
-        myApp.setVisible(true);
+        /*new login();
+
+        /*new gvFunction();*/
     }
 }

@@ -41,39 +41,38 @@ public class login extends JFrame
 
     public login()
     {
-        super("Account Management");
-        try {
-            GiaoVuDAO.initPass();
-        } catch(IOException ioe) {
-            System.err.println(ioe);
-        }
+        super("Log In");
+        this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(logPanel);
         this.pack();
+        this.setBounds(600, 250, 300, 300);
 
         logInButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String username = tUserName.getText();
                 String password = String.valueOf(logPassword.getPassword());
+                if (username.equals("") || password.equals(""))
+                    return;
                 if(giaoVuRadioButton.isSelected())
                 {
-                    GiaoVu gv = null;
-                    if (password.equals(GiaoVuDAO.getPasswordGv()))
-                        if (username != null)
-                            gv = GiaoVuDAO.getGiaoVuFromName(username);
+                    GiaoVu gv = GiaoVuDAO.getGiaoVuFromName(username);
                     if (gv != null)
-                        JOptionPane.showMessageDialog(logPanel, gv.toString());
+                        if(password.equals(gv.getPassword()))
+                        {
+                            new gvFunction();
+                            dispose();
+                        }
                     else
                         JOptionPane.showMessageDialog(logPanel, "Wrong username or password!");
                 }
                 else if(sinhVienRadioButton.isSelected())
                 {
-                    Student st = null;
-                    if(username.equals(password))
-                        if((st = StudentDAO.getStudentFromMssv(password)).getMssv().equals(password))
+                    Student st = StudentDAO.getLogInStudent(username, password);
+                    if(st != null)
                             JOptionPane.showMessageDialog(logPanel, st.toString());
-                    if(st == null)
+                    else
                         JOptionPane.showMessageDialog(logPanel, "Wrong username or password!");
                 }
             }
@@ -85,28 +84,34 @@ public class login extends JFrame
                 String username = tRName.getText();
                 String pass1 = String.valueOf(tRPass1.getPassword());
                 String pass2 = String.valueOf(tRPass2.getPassword());
-                GiaoVu gv = null;
+                if (username.equals("") || pass1.equals("") || pass2.equals(""))
+                    return;
                 if(giaoVuRadioButton.isSelected())
                 {
-                    if (pass1.equals(pass2) && pass1.equals(GiaoVuDAO.getPasswordGv()))
-                    {
-                        if (username != null)
-                            gv = GiaoVuDAO.getGiaoVuFromName(username);
-                    }
-                    else {
-                        JOptionPane.showMessageDialog(logPanel, "Wrong password or password confirmation is incorrect!");
-                    }
+                    GiaoVu gv = GiaoVuDAO.getGiaoVuFromName(username);
                     if (gv != null)
+                    {
                         JOptionPane.showMessageDialog(logPanel, "Username has already existed!");
+                        tRName.setText("");
+                    }
+                    else if (!pass1.equals(pass2))
+                    {
+                        JOptionPane.showMessageDialog(logPanel, "Password confirmation is incorrect!");
+                        tRPass2.setText("");
+                    }
                     else {
                         gv = new GiaoVu();
                         gv.setName(username);
+                        gv.setPassword(pass1);
                         GiaoVuDAO.addGiaoVu(gv);
+                        tRName.setText("");
+                        tRPass1.setText("");
+                        tRPass2.setText("");
                     }
                 }
                 else if(sinhVienRadioButton.isSelected())
                 {
-                    JOptionPane.showMessageDialog(logPanel, "Student can't register account on their own!");
+                    JOptionPane.showMessageDialog(logPanel, "Only teacher can add a student account!");
                 }
             }
         });
@@ -117,28 +122,35 @@ public class login extends JFrame
                 String username = tCName.getText();
                 String pass1 = String.valueOf(cPass1.getPassword());
                 String pass2 = String.valueOf(cPass2.getPassword());
-                GiaoVu gv = null;
+                if (username.equals("") || pass1.equals("") || pass2.equals(""))
+                    return;
                 if(giaoVuRadioButton.isSelected())
                 {
-                    if (pass1.equals(GiaoVuDAO.getPasswordGv()))
-                        if (username != null)
-                            gv = GiaoVuDAO.getGiaoVuFromName(username);
-                    if (gv != null) {
-                        GiaoVuDAO.setPasswordGv(pass2);
-                        try {
-                            GiaoVuDAO.changePass();
-                        } catch(IOException ioe) {
-                            System.err.println(ioe);
-                        }
+                    GiaoVu gv = GiaoVuDAO.getGiaoVuFromName(username);
+                    if (!pass1.equals(pass2) && gv != null && pass1.equals(gv.getPassword()))
+                    {
+                        gv.setPassword(pass2);
+                        GiaoVuDAO.updateGiaoVu(gv);
+                        JOptionPane.showMessageDialog(logPanel, "Password for teacher has been changed!");
                     }
-                    else {
-                        JOptionPane.showMessageDialog(logPanel, "Wrong username or password!");
-                    }
+                    else
+                        JOptionPane.showMessageDialog(logPanel, "Wrong username or password, or perhaps 2 password are the same!");
                 }
                 else if(sinhVienRadioButton.isSelected())
                 {
-                    //do sth
+                    Student st = StudentDAO.getLogInStudent(username, pass1);
+                    if(st != null && !pass1.equals(pass2))
+                    {
+                        st.setPassword(pass2);
+                        StudentDAO.updateStudent(st);
+                        JOptionPane.showMessageDialog(logPanel, "Password for student has been changed!");
+                    }
+                    else
+                        JOptionPane.showMessageDialog(logPanel, "Wrong username or password or 2 password are the same!");
                 }
+                tCName.setText("");
+                cPass1.setText("");
+                cPass2.setText("");
             }
         });
     }

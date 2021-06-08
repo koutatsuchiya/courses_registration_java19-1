@@ -1,29 +1,27 @@
 package dao;
 
-import pojo.GiaoVu;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import pojo.Registered;
 import utils.HibernateUtil;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
-public class GiaoVuDAO
+public class RegisteredDAO 
 {
-    public static List<GiaoVu> getAllGiaoVu()
+    public static List<Registered> getAllRegistered()
     {
         //open session
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<GiaoVu> giaoVus = null;
+        List<Registered> rgs = null;
         try {
             //create query
-            final String hql = "select gv from GiaoVu gv";
+            final String hql = "select rg from Registered rg";
             Query query = session.createQuery(hql);
-            //get all giaovu
-            giaoVus = query.list();
+            //get all Registered
+            rgs = query.list();
         } catch (HibernateException e)
         {
             System.err.println(e);
@@ -31,15 +29,15 @@ public class GiaoVuDAO
         {
             session.close();
         }
-        return giaoVus;
+        return rgs;
     }
 
-    public static GiaoVu getGiaoVu(int gv_id)
+    public static Registered getRegistered(int rg_id)
     {
-        GiaoVu gv = null;
+        Registered rg = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
-            gv = (GiaoVu) session.get(GiaoVu.class, gv_id);
+            rg = (Registered) session.get(Registered.class, rg_id);
         } catch (HibernateException e)
         {
             System.err.println(e);
@@ -47,19 +45,19 @@ public class GiaoVuDAO
         {
             session.close();
         }
-        return gv;
+        return rg;
     }
 
-    public static boolean addGiaoVu(GiaoVu gv)
+    public static boolean addRegistered(Registered rg)
     {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        if(!Integer.toString(gv.getId()).equals(""))
-            if(getGiaoVu(gv.getId()) != null)
+        if(!Integer.toString(rg.getId()).equals(""))
+            if(getRegistered(rg.getId()) != null)
                 return false;
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            session.save(gv);
+            session.save(rg);
             transaction.commit();
         } catch (HibernateException e)
         {
@@ -72,15 +70,15 @@ public class GiaoVuDAO
         return true;
     }
 
-    public static boolean updateGiaoVu(GiaoVu gv)
+    public static boolean updateRegistered(Registered rg)
     {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        if(getGiaoVu(gv.getId()) == null)
+        if(getRegistered(rg.getId()) == null)
             return false;
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            session.update(gv);
+            session.update(rg);
             transaction.commit();
         } catch (HibernateException e)
         {
@@ -93,16 +91,16 @@ public class GiaoVuDAO
         return true;
     }
 
-    public static boolean deleteGiaoVu(int gv_id)
+    public static boolean deleteRegistered(int rg_id)
     {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        GiaoVu gv = getGiaoVu(gv_id);
-        if (gv == null)
+        Registered rg = getRegistered(rg_id);
+        if (rg == null)
             return false;
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            session.delete(gv);
+            session.delete(rg);
             transaction.commit();
         } catch (HibernateException e)
         {
@@ -113,25 +111,5 @@ public class GiaoVuDAO
             session.close();
         }
         return true;
-    }
-
-    public static GiaoVu getGiaoVuFromName(String gv_name)
-    {
-        List<GiaoVu> gvs = getAllGiaoVu();
-        for (GiaoVu i : gvs)
-            if(gv_name.equalsIgnoreCase(i.getName()))
-                return i;
-        return null;
-    }
-
-    public static List<GiaoVu> getGiaoVusFromString(String val)
-    {
-        List<GiaoVu> gvs = getAllGiaoVu();
-        List<GiaoVu> temp = new ArrayList<>();
-        String t = val.toLowerCase();
-        for (GiaoVu i : gvs)
-            if(String.valueOf(i.getId()).contains(t) || i.getName().toLowerCase().contains(t))
-                temp.add(i);
-        return temp;
     }
 }

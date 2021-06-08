@@ -117,6 +117,7 @@ public class gvFunction extends JFrame
     public gvFunction()
     {
         super("Giao Vu Window");
+        this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPane);
         this.pack();
