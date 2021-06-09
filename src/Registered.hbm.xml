@@ -15,5 +15,8 @@
         <property name="courseId">
             <column name="course_id" sql-type="integer"/>
         </property>
+        <property name="dateEnroll">
+            <column name="date_enroll" sql-type="date"/>
+        </property>
     </class>
 </hibernate-mapping>

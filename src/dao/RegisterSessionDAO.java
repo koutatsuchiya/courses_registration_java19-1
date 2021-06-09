@@ -49,8 +49,27 @@ public class RegisterSessionDAO
         return rs;
     }
 
+    public static RegisterSession currentlyInRegisterSession()
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        RegisterSession rs = null;
+        try {
+            final String hql = "select rs from RegisterSession rs where rs.semesterId.current = true and rs.dayStart <= :now and :now <= rs.dayEnd";
+            Query query = session.createQuery(hql);
+            query.setParameter("now", new Date(System.currentTimeMillis()));
+            rs = (RegisterSession) query.uniqueResult();
+        } catch (HibernateException e) {
+            System.err.println(e);
+        } finally {
+            session.close();
+        }
+        return rs;
+    }
+
     public static boolean addRegisterSession(RegisterSession rs)
     {
+        if(currentlyInRegisterSession() != null)
+            return false;
         Session session = HibernateUtil.getSessionFactory().openSession();
         if(!Integer.toString(rs.getId()).equals(""))
             if(getRegisterSession(rs.getId()) != null)

@@ -7,7 +7,6 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.*;
 import java.sql.Date;
 import java.util.List;
@@ -116,13 +115,12 @@ public class gvFunction extends JFrame
 
     public gvFunction()
     {
-        super("Giao Vu Window");
+        super("Teacher Window");
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPane);
         this.pack();
         this.setBounds(200, 150, 1000, 500);
-        this.setResizable(false);
 
         //CAU 2: GV ACCOUNT-----------------------------------------------------------------------
         List<GiaoVu> gvs = GiaoVuDAO.getAllGiaoVu();
@@ -504,7 +502,7 @@ public class gvFunction extends JFrame
                         RegisterSession temp2 = RegisterSessionDAO.getRegisterSessionFromDate(temp1.getDayStart(), temp1.getDayEnd());
                         registerSessionTable.addRow(new Object[]{temp2.getId(), temp2.getDayStart(), temp2.getDayEnd(), temp2.getSemesterId().getName(), temp2.getSemesterId().getYear()});
                     } else
-                        JOptionPane.showMessageDialog(null, "Error! Cannot add this register session!");
+                        JOptionPane.showMessageDialog(null, "Error! Cannot add this register session!\nCheck if there are any session occur!");
                 } catch (Exception any_e) {
                     JOptionPane.showMessageDialog(null, "Error! There is no current semester!");
                 }
@@ -513,7 +511,7 @@ public class gvFunction extends JFrame
 
         //CAU 8: COURSE------------------------------------------------------------------------------------------
         List<Course> crs = CourseDAO.getAllCourse();
-        DefaultTableModel courseTable = new DefaultTableModel(null, new String[]{"id", "subject id", "subject name", "subject credits", "gvlt", "room", "weekday", "shift", "slot", "semester name", "year"}){
+        DefaultTableModel courseTable = new DefaultTableModel(null, new String[]{"id", "subject id", "subject name", "credits", "gvlt", "room", "weekday", "shift", "slot", "semester name", "year"}){
             public boolean isCellEditable(int row, int column){ return false; }
         };
         crsTable.setModel(courseTable);

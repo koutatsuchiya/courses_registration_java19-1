@@ -14,12 +14,12 @@ public class Main
 {
     public static void main(String[] args)
     {
-        List<GiaoVu> t = GiaoVuDAO.getAllGiaoVu();
-        for (GiaoVu i : t)
+        /*List<Registered> t = RegisteredDAO.getAllRegistered();
+        for (Registered i : t)
             System.out.println(i.toString());
 
-        /*new login();
+        new login();*/
 
-        /*new gvFunction();*/
+        new gvFunction();
     }
 }

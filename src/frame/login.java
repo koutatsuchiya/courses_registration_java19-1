@@ -70,8 +70,10 @@ public class login extends JFrame
                 else if(sinhVienRadioButton.isSelected())
                 {
                     Student st = StudentDAO.getLogInStudent(username, password);
-                    if(st != null)
-                            JOptionPane.showMessageDialog(logPanel, st.toString());
+                    if(st != null) {
+                        new stFunction(st);
+                        dispose();
+                    }
                     else
                         JOptionPane.showMessageDialog(logPanel, "Wrong username or password!");
                 }

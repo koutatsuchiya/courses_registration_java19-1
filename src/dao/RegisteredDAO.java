@@ -4,9 +4,11 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import pojo.RegisterSession;
 import pojo.Registered;
 import utils.HibernateUtil;
 
+import java.sql.Date;
 import java.util.List;
 
 public class RegisteredDAO 
@@ -38,18 +40,73 @@ public class RegisteredDAO
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             rg = (Registered) session.get(Registered.class, rg_id);
-        } catch (HibernateException e)
-        {
+        } catch (HibernateException e) {
             System.err.println(e);
-        } finally
-        {
+        } finally {
             session.close();
         }
         return rg;
     }
 
+    public static boolean less8CourseInCurSemester(int st_id)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        int n = 0;
+        try {
+            final String hql = "select count(*) from Registered rg, Course crs, Semester sm where rg.studentId = :st_id and rg.courseId = crs.id and crs.semesterId = sm.id and sm.current = true";
+            Query query = session.createQuery(hql);
+            query.setParameter("st_id", st_id);
+            n = Integer.valueOf(query.uniqueResult().toString());
+        } catch (HibernateException e) {
+            System.err.println(e);
+        } finally {
+            session.close();
+        }
+        return n < 8;
+    }
+
+    public static boolean subjectAlreadyRegisteredInCurSemester(int st_id, String sj_id)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        int n = 0;
+        try {
+            final String hql = "select count(*) from Registered rg, Course crs, Semester sm where rg.studentId = :st_id and rg.courseId = crs.id and crs.subjectId = :sj_id and crs.semesterId = sm.id and sm.current = true";
+            Query query = session.createQuery(hql);
+            query.setParameter("st_id", st_id);
+            query.setParameter("sj_id", sj_id);
+            n = Integer.valueOf(query.uniqueResult().toString());
+        } catch (HibernateException e) {
+            System.err.println(e);
+        } finally {
+            session.close();
+        }
+        return n == 1;
+    }
+
+    public static int takenSlot(int crs_id)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        int n = 0;
+        try {
+            final String hql = "select count(*) from Registered rg where rg.courseId = :crs_id";
+            Query query = session.createQuery(hql);
+            query.setParameter("crs_id", crs_id);
+            n = Integer.valueOf(query.uniqueResult().toString());
+        } catch (HibernateException e) {
+            System.err.println(e);
+        } finally {
+            session.close();
+        }
+        return n;
+    }
+
     public static boolean addRegistered(Registered rg)
     {
+        if(!less8CourseInCurSemester(rg.getStudentId()))
+            return false;
+        if(subjectAlreadyRegisteredInCurSemester(rg.getStudentId(), SubjectDAO.getSubject(CourseDAO.getCourse(rg.getCourseId()).getSubjectId()).getId()))
+            return false;
+        rg.setDateEnroll(new Date(System.currentTimeMillis()));
         Session session = HibernateUtil.getSessionFactory().openSession();
         if(!Integer.toString(rg.getId()).equals(""))
             if(getRegistered(rg.getId()) != null)
@@ -59,12 +116,10 @@ public class RegisteredDAO
             transaction = session.beginTransaction();
             session.save(rg);
             transaction.commit();
-        } catch (HibernateException e)
-        {
+        } catch (HibernateException e) {
             transaction.rollback();
             System.err.println(e);
-        } finally
-        {
+        } finally {
             session.close();
         }
         return true;
@@ -111,5 +166,44 @@ public class RegisteredDAO
             session.close();
         }
         return true;
+    }
+
+    public static Registered getUniqueRegistered(int st_id, int crs_id)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Registered rg = null;
+        try {
+            final String hql = "select rg from Registered rg where rg.studentId = :st_id and rg.courseId = :crs_id";
+            Query query = session.createQuery(hql);
+            query.setParameter("st_id", st_id);
+            query.setParameter("crs_id", crs_id);
+            rg = (Registered) query.uniqueResult();
+        } catch (HibernateException e)
+        {
+            System.err.println(e);
+        } finally
+        {
+            session.close();
+        }
+        return rg;
+    }
+
+    public static List<Registered> getSpecificRegistered(int st_id)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Registered> rgs = null;
+        try {
+            final String hql = "select rg from Registered rg where rg.studentId = :st_id";
+            Query query = session.createQuery(hql);
+            query.setParameter("st_id", st_id);
+            rgs = query.list();
+        } catch (HibernateException e)
+        {
+            System.err.println(e);
+        } finally
+        {
+            session.close();
+        }
+        return rgs;
     }
 }
