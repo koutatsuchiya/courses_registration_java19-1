@@ -97,6 +97,7 @@ public class SubjectDAO
         Subject sj = getSubject(sj_id);
         if (sj == null)
             return false;
+        CourseDAO.deleteCourseWithSubject(sj_id);
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();

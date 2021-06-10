@@ -97,6 +97,8 @@ public class StudentDAO
         Student st = getStudent(st_id);
         if (st == null)
             return false;
+        //delete all course registered information by this student
+        RegisteredDAO.deleteRegisteredStudent(st_id);
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -144,12 +146,29 @@ public class StudentDAO
             query.setParameter("st_mssv", st_mssv);
             query.setParameter("st_pass", st_pass);
             st = (Student)query.uniqueResult();
-        } catch (HibernateException e)
-        {
+        } catch (HibernateException e) {
             System.err.println(e);
         } finally {
             session.close();
         }
         return st;
+    }
+
+    public static void deleteClassStudent(int lh_id)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Student> sts = null;
+        try {
+            final String hql = "select st from Student st where st.classId.id = :lh_id";
+            Query query = session.createQuery(hql);
+            query.setParameter("lh_id", lh_id);
+            sts = query.list();
+        } catch (HibernateException e) {
+            System.err.println(e);
+        } finally {
+            session.close();
+        }
+        for(Student i : sts)
+            deleteStudent(i.getId());
     }
 }

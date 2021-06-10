@@ -56,6 +56,7 @@ public class GiaoVuDAO
         if(!Integer.toString(gv.getId()).equals(""))
             if(getGiaoVu(gv.getId()) != null)
                 return false;
+        gv.setPassword("12345678");
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -115,13 +116,22 @@ public class GiaoVuDAO
         return true;
     }
 
-    public static GiaoVu getGiaoVuFromName(String gv_name)
+    //get the recently add of that name
+    public static GiaoVu getGiaoVuFromNameRecentlyAdded(String gv_name)
     {
         List<GiaoVu> gvs = getAllGiaoVu();
+        List<GiaoVu> temp = new ArrayList<>();
         for (GiaoVu i : gvs)
-            if(gv_name.equalsIgnoreCase(i.getName()))
-                return i;
-        return null;
+            if(gv_name.equals(i.getName()))
+                temp.add(i);
+        GiaoVu maxId = null;
+        if(temp.size() >= 1)
+            for (GiaoVu i : temp)
+                if(maxId == null)
+                    maxId = i;
+                else if(maxId.getId() < i.getId())
+                    maxId = i;
+        return maxId;
     }
 
     public static List<GiaoVu> getGiaoVusFromString(String val)

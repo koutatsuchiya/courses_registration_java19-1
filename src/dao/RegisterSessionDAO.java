@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import pojo.RegisterSession;
 import pojo.Semester;
+import pojo.Student;
 import utils.HibernateUtil;
 
 import java.sql.Date;
@@ -151,5 +152,23 @@ public class RegisterSessionDAO
             session.close();
         }
         return temp;
+    }
+
+    public static void deleteRegisterSessionWithSemester(int sm_id)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<RegisterSession> rs = null;
+        try {
+            final String hql = "select rs from RegisterSession rs where rs.semesterId.id = :sm_id";
+            Query query = session.createQuery(hql);
+            query.setParameter("sm_id", sm_id);
+            rs = query.list();
+        } catch (HibernateException e) {
+            System.err.println(e);
+        } finally {
+            session.close();
+        }
+        for(RegisterSession i : rs)
+            deleteRegisterSession(i.getId());
     }
 }

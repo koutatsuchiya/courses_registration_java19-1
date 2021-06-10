@@ -17,13 +17,6 @@ public class login extends JFrame
     private JPasswordField logPassword;
     private JRadioButton giaoVuRadioButton;
     private JRadioButton sinhVienRadioButton;
-    private JButton rBut;
-    private JTextField tRName;
-    private JPasswordField tRPass1;
-    private JPasswordField tRPass2;
-    private JLabel rName;
-    private JLabel rPass1;
-    private JLabel rPass2;
     private JButton changeBut;
     private JTextField tCName;
     private JPanel changePass;
@@ -34,7 +27,6 @@ public class login extends JFrame
     private JPasswordField cPass2;
     private JLabel lName;
     private JLabel lPass;
-    private JPanel rPane;
     private JPanel lPane;
 
     public login()
@@ -55,7 +47,13 @@ public class login extends JFrame
                     return;
                 if(giaoVuRadioButton.isSelected())
                 {
-                    GiaoVu gv = GiaoVuDAO.getGiaoVuFromName(username);
+                    GiaoVu gv = null;
+                    try {
+                        gv = GiaoVuDAO.getGiaoVu(Integer.valueOf(username));
+                    } catch(Exception any_e){
+                        JOptionPane.showMessageDialog(logPanel, "Wrong username or password!");
+                        return;
+                    }
                     if (gv != null)
                         if(password.equals(gv.getPassword()))
                         {
@@ -78,44 +76,6 @@ public class login extends JFrame
             }
         });
 
-        rBut.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String username = tRName.getText();
-                String pass1 = String.valueOf(tRPass1.getPassword());
-                String pass2 = String.valueOf(tRPass2.getPassword());
-                if (username.equals("") || pass1.equals("") || pass2.equals(""))
-                    return;
-                if(giaoVuRadioButton.isSelected())
-                {
-                    GiaoVu gv = GiaoVuDAO.getGiaoVuFromName(username);
-                    if (gv != null)
-                    {
-                        JOptionPane.showMessageDialog(logPanel, "Username has already existed!");
-                        tRName.setText("");
-                    }
-                    else if (!pass1.equals(pass2))
-                    {
-                        JOptionPane.showMessageDialog(logPanel, "Password confirmation is incorrect!");
-                        tRPass2.setText("");
-                    }
-                    else {
-                        gv = new GiaoVu();
-                        gv.setName(username);
-                        gv.setPassword(pass1);
-                        GiaoVuDAO.addGiaoVu(gv);
-                        tRName.setText("");
-                        tRPass1.setText("");
-                        tRPass2.setText("");
-                    }
-                }
-                else if(sinhVienRadioButton.isSelected())
-                {
-                    JOptionPane.showMessageDialog(logPanel, "Only teacher can add a student account!");
-                }
-            }
-        });
-
         changeBut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -126,7 +86,13 @@ public class login extends JFrame
                     return;
                 if(giaoVuRadioButton.isSelected())
                 {
-                    GiaoVu gv = GiaoVuDAO.getGiaoVuFromName(username);
+                    GiaoVu gv = null;
+                    try {
+                        gv = GiaoVuDAO.getGiaoVu(Integer.valueOf(username));
+                    } catch(Exception any_e){
+                        JOptionPane.showMessageDialog(logPanel, "Wrong username or password!");
+                        return;
+                    }
                     if (!pass1.equals(pass2) && gv != null && pass1.equals(gv.getPassword()))
                     {
                         gv.setPassword(pass2);

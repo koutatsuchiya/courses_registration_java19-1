@@ -102,15 +102,15 @@ public class stFunction extends JFrame
                         temp.setStudentId(acc.getId());
                         Course t_crs = CourseDAO.getCourse(crs_id);
                         if(RegisteredDAO.takenSlot(t_crs.getId()) >= t_crs.getSlot())
-                            JOptionPane.showMessageDialog(null, "This course's slot if full!");
+                            return;
+                        else if(RegisteredDAO.isTimeAlreadyTaken(acc.getId(), t_crs.getSemesterId(), t_crs.getWeekday(), t_crs.getShift()))
+                            return;
                         else if(RegisteredDAO.addRegistered(temp))
                         {
-                            //only can register max 8 course with different subject in current semester
+                            //only can register max 8 course with different subject and time in current semester
                             course_registeredTable.addRow(new Object[]{t_crs.getId(), sj_id, sj_name, sj_cre, t_crs.getGvlt(), t_crs.getRoom(), t_crs.getWeekday(), t_crs.getShift(), t_crs.getSlot(), sm_name, sm_year});
                             registerTable.removeRow(rgTable.getSelectedRow());
                         }
-                        else
-                            JOptionPane.showMessageDialog(null, "Error! Cannot register this course!\nCheck if you have already enroll 8 course!\nOr check if that course have the same subject that with a course you enrolled this semester!");
                         rgLabel.setText("");
                     }
                 });

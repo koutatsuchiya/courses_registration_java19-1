@@ -4,10 +4,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import pojo.Course;
-import pojo.GiaoVu;
-import pojo.Semester;
-import pojo.Subject;
+import pojo.*;
 import utils.HibernateUtil;
 
 import java.util.ArrayList;
@@ -132,6 +129,7 @@ public class CourseDAO
         Course course = getCourse(course_id);
         if (course == null)
             return false;
+        RegisteredDAO.deleteRegisteredCourse(course_id);
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -214,5 +212,41 @@ public class CourseDAO
                 temp.add(i);
         }
         return temp;
+    }
+
+    public static void deleteCourseWithSemester(int sm_id)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Course> crs = null;
+        try {
+            final String hql = "select crs from Course crs where crs.semesterId = :sm_id";
+            Query query = session.createQuery(hql);
+            query.setParameter("sm_id", sm_id);
+            crs = query.list();
+        } catch (HibernateException e) {
+            System.err.println(e);
+        } finally {
+            session.close();
+        }
+        for(Course i : crs)
+            deleteCourse(i.getId());
+    }
+
+    public static void deleteCourseWithSubject(String sj_id)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Course> crs = null;
+        try {
+            final String hql = "select crs from Course crs where crs.subjectId = :sj_id";
+            Query query = session.createQuery(hql);
+            query.setParameter("sj_id", sj_id);
+            crs = query.list();
+        } catch (HibernateException e) {
+            System.err.println(e);
+        } finally {
+            session.close();
+        }
+        for(Course i : crs)
+            deleteCourse(i.getId());
     }
 }

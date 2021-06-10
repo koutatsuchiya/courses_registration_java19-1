@@ -83,6 +83,26 @@ public class RegisteredDAO
         return n == 1;
     }
 
+    public static boolean isTimeAlreadyTaken(int st_id, int sm_id, int crs_wd, int crs_shf)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        int n = 0;
+        try {
+            final String hql = "select count(*) from Registered rg, Course crs where rg.studentId = :st_id and rg.courseId = crs.id and crs.semesterId = :sm_id and crs.weekday = :crs_wd and crs.shift = :crs_shf";
+            Query query = session.createQuery(hql);
+            query.setParameter("st_id", st_id);
+            query.setParameter("sm_id", sm_id);
+            query.setParameter("crs_wd", crs_wd);
+            query.setParameter("crs_shf", crs_shf);
+            n = Integer.valueOf(query.uniqueResult().toString());
+        } catch (HibernateException e) {
+            System.err.println(e);
+        } finally {
+            session.close();
+        }
+        return n > 0;
+    }
+
     public static int takenSlot(int crs_id)
     {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -220,5 +240,19 @@ public class RegisteredDAO
             session.close();
         }
         return rgs;
+    }
+
+    public static void deleteRegisteredStudent(int st_id)
+    {
+        List<Registered> rgs = getSpecificRegistered(st_id);
+        for(Registered i : rgs)
+            deleteRegistered(i.getId());
+    }
+
+    public static void deleteRegisteredCourse(int crs_id)
+    {
+        List<Registered> rgs = getCourseRegisteredList(crs_id);
+        for(Registered i : rgs)
+            deleteRegistered(i.getId());
     }
 }

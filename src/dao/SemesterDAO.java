@@ -118,6 +118,8 @@ public class SemesterDAO
         Semester sm = getSemester(sm_id);
         if (sm == null)
             return false;
+        RegisterSessionDAO.deleteRegisterSessionWithSemester(sm_id);
+        CourseDAO.deleteCourseWithSemester(sm_id);
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
