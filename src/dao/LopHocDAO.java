@@ -94,6 +94,8 @@ public class LopHocDAO
 
     public static boolean deleteLopHoc(int lh_id)
     {
+        if(countMale(lh_id) + countFemale(lh_id) > 0)
+            return false;
         Session session = HibernateUtil.getSessionFactory().openSession();
         LopHoc lh = getLopHoc(lh_id);
         if (lh == null)

@@ -197,11 +197,26 @@ public class RegisteredDAO
             Query query = session.createQuery(hql);
             query.setParameter("st_id", st_id);
             rgs = query.list();
-        } catch (HibernateException e)
-        {
+        } catch (HibernateException e) {
             System.err.println(e);
-        } finally
-        {
+        } finally {
+            session.close();
+        }
+        return rgs;
+    }
+
+    public static List<Registered> getCourseRegisteredList(int crs_id)
+    {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Registered> rgs = null;
+        try {
+            final String hql = "select rg from Registered rg where rg.courseId = :crs_id";
+            Query query = session.createQuery(hql);
+            query.setParameter("crs_id", crs_id);
+            rgs = query.list();
+        } catch (HibernateException e) {
+            System.err.println(e);
+        } finally {
             session.close();
         }
         return rgs;

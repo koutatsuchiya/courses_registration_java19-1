@@ -32,6 +32,8 @@ public class stFunction extends JFrame
     private JButton logOutBut;
     private JLabel nameLabel;
     private JLabel session_open;
+    private JLabel rgLabel;
+    private JLabel in4Label;
 
     public stFunction(Student acc)
     {
@@ -87,10 +89,8 @@ public class stFunction extends JFrame
                 rgBut.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if(now_rs == null) {
-
+                        if(now_rs == null)
                             return;
-                        }
                         int crs_id = (Integer)registerTable.getValueAt(rgTable.getSelectedRow(), 0);
                         String sj_id = registerTable.getValueAt(rgTable.getSelectedRow(), 1).toString();
                         String sj_name = registerTable.getValueAt(rgTable.getSelectedRow(), 2).toString();
@@ -110,9 +110,18 @@ public class stFunction extends JFrame
                             registerTable.removeRow(rgTable.getSelectedRow());
                         }
                         else
-                            JOptionPane.showMessageDialog(null, "Error! Cannot register this course!");
+                            JOptionPane.showMessageDialog(null, "Error! Cannot register this course!\nCheck if you have already enroll 8 course!\nOr check if that course have the same subject that with a course you enrolled this semester!");
+                        rgLabel.setText("");
                     }
                 });
+            }
+        });
+        rgTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                int n = RegisteredDAO.takenSlot((Integer)rgTable.getValueAt(rgTable.getSelectedRow(), 0));
+                rgLabel.setText(String.valueOf(n) + ".");
             }
         });
 
@@ -124,6 +133,8 @@ public class stFunction extends JFrame
             Semester t2 = SemesterDAO.getSemester(t_crs.getSemesterId());
             course_registeredTable.addRow(new Object[]{t_crs.getId(), t1.getId(), t1.getName(), t1.getCredits(), t_crs.getGvlt(), t_crs.getRoom(), t_crs.getWeekday(), t_crs.getShift(), t_crs.getSlot(), t2.getName(), t2.getYear()});
         }
+
+        //CAU 12: XOA HP NEU CON HAN--------------------------------------------------------------------------------
         ListSelectionModel listSelectionModel2 = rcTable.getSelectionModel();
         listSelectionModel2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listSelectionModel2.addListSelectionListener(new ListSelectionListener() {
@@ -132,6 +143,8 @@ public class stFunction extends JFrame
                 dBut.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        if(now_rs == null)
+                            return;
                         int crs_id = (Integer)course_registeredTable.getValueAt(rcTable.getSelectedRow(), 0);
                         String sj_id = course_registeredTable.getValueAt(rcTable.getSelectedRow(), 1).toString();
                         String sj_name = course_registeredTable.getValueAt(rcTable.getSelectedRow(), 2).toString();

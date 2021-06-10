@@ -7,8 +7,6 @@ import pojo.Student;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.*;
-import java.io.IOException;
 
 public class login extends JFrame
 {
@@ -46,7 +44,7 @@ public class login extends JFrame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(logPanel);
         this.pack();
-        this.setBounds(600, 250, 300, 300);
+        this.setBounds(600, 275, 300, 300);
 
         logInButton.addActionListener(new ActionListener() {
             @Override
@@ -61,7 +59,7 @@ public class login extends JFrame
                     if (gv != null)
                         if(password.equals(gv.getPassword()))
                         {
-                            new gvFunction();
+                            new gvFunction(gv);
                             dispose();
                         }
                     else

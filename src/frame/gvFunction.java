@@ -112,15 +112,61 @@ public class gvFunction extends JFrame
     private JScrollPane crsScroll;
     private JPanel crsForm;
     private JButton curBut7;
+    private JTextField nameAccText;
+    private JTextField idAccText;
+    private JLabel idAccLabel;
+    private JLabel nameAccLabel;
+    private JButton resetPassBut;
+    private JButton logOutBut;
+    private JPanel studentPane;
+    private JTable stTable;
+    private JButton addBut5;
+    private JButton resetBut5;
+    private JScrollPane stScroll;
+    private JPanel stForm;
+    private JTextField mssvText5;
+    private JTextField nameText5;
+    private JTextField class_idText5;
+    private JComboBox gender_comboBox5;
+    private JLabel mssvLabel5;
+    private JLabel nameLabel5;
+    private JLabel genderLabel5;
+    private JLabel class_idLabel5;
+    private JPanel registeredPane;
+    private JTable rgTable;
+    private JButton seeBut8;
+    private JButton resetBut8;
+    private JPanel spacingPane8;
+    private JScrollPane rgScroll;
+    private JLabel rgLabel;
 
-    public gvFunction()
+    public gvFunction(GiaoVu acc)
     {
         super("Teacher Window");
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPane);
         this.pack();
-        this.setBounds(200, 150, 1000, 500);
+        this.setBounds(275, 150, 1000, 500);
+
+        //SET UP Account In4
+        idAccText.setText(String.valueOf(acc.getId()));
+        nameAccText.setText(acc.getName());
+
+        resetPassBut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                acc.setPassword("12345678");
+                GiaoVuDAO.updateGiaoVu(acc);
+            }
+        });
+        logOutBut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new login();
+                dispose();
+            }
+        });
 
         //CAU 2: GV ACCOUNT-----------------------------------------------------------------------
         List<GiaoVu> gvs = GiaoVuDAO.getAllGiaoVu();
@@ -174,6 +220,9 @@ public class gvFunction extends JFrame
                 deleteBut1.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        //cannot delete teacher account on your own
+                        if(acc.getId() == (Integer) gvTable.getValueAt(gvTable.getSelectedRow(), 0))
+                            return;
                         GiaoVuDAO.deleteGiaoVu((Integer) gvTable.getValueAt(gvTable.getSelectedRow(), 0));
                         giaoVuTable.removeRow(gvTable.getSelectedRow());
                     }
@@ -395,8 +444,6 @@ public class gvFunction extends JFrame
                             temp.setCurrent(false);
                             if(SemesterDAO.updateSemester(temp))
                                 smTable.setValueAt(false, smTable.getSelectedRow(), 5);
-                            else
-                                JOptionPane.showMessageDialog(null, "Error! Cannot set this semester as non-current!");
                         }
                     }
                 });
@@ -444,8 +491,11 @@ public class gvFunction extends JFrame
                 deleteBut4.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        LopHocDAO.deleteLopHoc((Integer) lhTable.getValueAt(lhTable.getSelectedRow(), 0));
-                        lopHocTable.removeRow(lhTable.getSelectedRow());
+                        if(LopHocDAO.deleteLopHoc((Integer) lhTable.getValueAt(lhTable.getSelectedRow(), 0)))
+                        {
+                            lopHocTable.removeRow(lhTable.getSelectedRow());
+                            JOptionPane.showMessageDialog(null, "You can only delete this class if there are no student in it!");
+                        }
                     }
                 });
             }
@@ -468,7 +518,64 @@ public class gvFunction extends JFrame
         });
 
         //CAU 6: SINH VIEN---------------------------------------------------------------------------------
+        List<Student> sts = StudentDAO.getAllStudent();
+        DefaultTableModel StudentTable = new DefaultTableModel(null, new String[]{"id", "mssv", "name", "gender", "class"}){
+            public boolean isCellEditable(int row, int column){ return false; }
+        };
+        stTable.setModel(StudentTable);
+        for (Student i : sts) {
+            StudentTable.addRow(new Object[]{i.getId(), i.getMssv(), i.getName(), i.getGender(), i.getClassId().getName()});
+        }
 
+        addBut5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String[] t = {mssvText5.getText(), nameText5.getText(), gender_comboBox5.getSelectedItem().toString(), class_idText5.getText()};
+                if(t[0].equals("") || t[1].equals("") || t[3].equals("")) { return; }
+                Student temp1 = new Student();
+                temp1.setMssv(t[0]);
+                temp1.setName(t[1]);
+                temp1.setGender(t[2]);
+                temp1.setClassId(LopHocDAO.getLopHocFromName(t[3]));
+                if(StudentDAO.addStudent(temp1))
+                {
+                    Student temp2 = StudentDAO.getUniqueStudent(t[0], t[1]);
+                    StudentTable.addRow(new Object[]{temp2.getId(), temp2.getMssv(), temp2.getName(), temp2.getGender(), temp2.getClassId().getName()});
+                    mssvText5.setText("");
+                    nameText5.setText("");
+                    class_idText5.setText("");
+                    //update class table
+                    int n_row = lopHocTable.getRowCount();
+                    for(int i = n_row - 1; i >= 0; i--)
+                        lopHocTable.removeRow(i);
+                    List<LopHoc> rs = LopHocDAO.getAllLopHoc();
+                    for(LopHoc i : rs) {
+                        int n = LopHocDAO.countMale(i.getId());
+                        int m = LopHocDAO.countFemale(i.getId());
+                        int total = n + m;
+                        lopHocTable.addRow(new Object[]{i.getId(), i.getName(), n, m, total});
+                    }
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "Error! Cannot add giao vu account!");
+            }
+        });
+        ListSelectionModel listSelectionModel5 = stTable.getSelectionModel();
+        listSelectionModel5.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listSelectionModel5.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                resetBut5.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        //reset pass
+                        Student temp = StudentDAO.getStudent((Integer)stTable.getValueAt(stTable.getSelectedRow(), 0));
+                        temp.setPassword(temp.getMssv());
+                        StudentDAO.updateStudent(temp);
+                    }
+                });
+            }
+        });
 
         //CAU 7: KI DANG KI HOC PHAN-----------------------------------------------------------------------
         List<RegisterSession> sss = RegisterSessionDAO.getAllRegisterSession();
@@ -618,6 +725,75 @@ public class gvFunction extends JFrame
                     Semester t2 = SemesterDAO.getSemester(i.getSemesterId());
                     courseTable.addRow(new Object[]{i.getId(), t1.getId(), t1.getName(), t1.getCredits(), i.getGvlt(), i.getRoom(), i.getWeekday(), i.getShift(), i.getSlot(), t2.getName(), t2.getYear()});
                 }
+            }
+        });
+
+        //CAU 9: SINH VIEN TRONG 1 HOC PHAN-----------------------------------------------------------------------
+        DefaultTableModel registeredTable = new DefaultTableModel(null, new String[]{"id", "subject id", "subject name", "credits", "gvlt", "room", "weekday", "shift", "slot", "semester name", "year"}){
+            public boolean isCellEditable(int row, int column){ return false; }
+        };
+        rgTable.setModel(registeredTable);
+
+        DefaultTableModel registered_studentTable = new DefaultTableModel(null, new String[]{"mssv", "name", "subject id", "subject name", "gvlt",  "weekday", "time", "registered date"}){
+            public boolean isCellEditable(int row, int column){ return false; }
+        };
+        //crs is already queried above
+        for (Course i : crs) {
+            Subject t1 = SubjectDAO.getSubject(i.getSubjectId());
+            Semester t2 = SemesterDAO.getSemester(i.getSemesterId());
+            registeredTable.addRow(new Object[]{i.getId(), t1.getId(), t1.getName(), t1.getCredits(), i.getGvlt(), i.getRoom(), i.getWeekday(), i.getShift(), i.getSlot(), t2.getName(), t2.getYear()});
+        }
+
+        ListSelectionModel listSelectionModel8 = rgTable.getSelectionModel();
+        listSelectionModel8.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listSelectionModel8.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                seeBut8.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        rgTable.setModel(registered_studentTable);
+                        Course crs = CourseDAO.getCourse((Integer) rgTable.getValueAt(rgTable.getSelectedRow(), 0));
+                        List<Registered> crs_rg = RegisteredDAO.getCourseRegisteredList(crs.getId());
+                        int n_row = registeredTable.getRowCount();
+                        for(int i = n_row - 1; i >= 0; i--)
+                            registeredTable.removeRow(i);
+                        if(crs_rg != null)
+                        {
+                            Subject sj = SubjectDAO.getSubject(crs.getSubjectId());
+                            for (Registered i : crs_rg) {
+                                Student st = StudentDAO.getStudent(i.getStudentId());
+                                String shift;
+                                if(crs.getShift() == 1)
+                                    shift = "7:30 - 9:30";
+                                else if(crs.getShift() == 2)
+                                    shift = "9:30 - 11:30";
+                                else if(crs.getShift() == 3)
+                                    shift = "13:30 - 15:30";
+                                else
+                                    shift = "15:30 - 17:30";
+                                registeredTable.addRow(new Object[]{st.getMssv(), st.getName(), sj.getId(), sj.getName(), crs.getGvlt(), crs.getWeekday(), shift, i.getDateEnroll()});
+                            }
+                            rgLabel.setText("Registered: " + String.valueOf(RegisteredDAO.takenSlot(crs.getId())) + ".");
+                        }
+                    }
+                });
+            }
+        });
+        resetBut8.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rgTable.setModel(registeredTable);
+                int n_row = registeredTable.getRowCount();
+                for(int i = n_row - 1; i >= 0; i--)
+                    registeredTable.removeRow(i);
+                List<Course> rs = CourseDAO.getAllCourse();
+                for(Course i : rs) {
+                    Subject t1 = SubjectDAO.getSubject(i.getSubjectId());
+                    Semester t2 = SemesterDAO.getSemester(i.getSemesterId());
+                    registeredTable.addRow(new Object[]{i.getId(), t1.getId(), t1.getName(), t1.getCredits(), i.getGvlt(), i.getRoom(), i.getWeekday(), i.getShift(), i.getSlot(), t2.getName(), t2.getYear()});
+                }
+                rgLabel.setText("");
             }
         });
     }
